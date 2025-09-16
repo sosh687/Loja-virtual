@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Loja Virtual</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 🔹 Navbar -->
+  <header class="navbar">
+    <div class="logo">Minha Loja</div>
+    <nav>
+      <ul>
+        <li><a href="#">Início</a></li>
+        <li><a href="#">Produtos</a></li>
+        <li><a href="#">Coleções</a></li>
+        <li><a href="#">Serviços</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </nav>
+    <div class="cart-icon">
+      🛒 <span id="cart-count">0</span>
+    </div>
+  </header>
+
+  <!-- 🔹 Banner -->
+  <section class="banner">
+    <div class="banner-text">
+      <h1>Moda & Estilo</h1>
+      <p>Descubra peças incríveis para qualquer ocasião.</p>
+      <button>Compre Agora</button>
+    </div>
+    <div class="banner-img">
+      <img src="https://via.placeholder.com/400x400" alt="Modelo de moda">
+    </div>
+  </section>
+
+  <!-- 🔹 Categorias -->
+  <section class="categorias">
+    <div class="categoria">Soft & Promotions</div>
+    <div class="categoria">Sníers Currency</div>
+    <div class="categoria">Exclusivos</div>
+  </section>
+
+  <!-- 🔹 Lista de produtos -->
+  <main class="container">
+    <h2>Produtos em Destaque</h2>
+    <div id="products-list" class="produtos"></div>
+  </main>
+
+  <!-- 🔹 Carrinho -->
+  <aside class="carrinho">
+    <h2>🛒 Seu Carrinho</h2>
+    <div id="cart-items"></div>
+    <div class="cart-total">
+      <strong>Total:</strong> R$ <span id="cart-total">0.00</span>
+    </div>
+    <button onclick="checkout()">Finalizar Pedido</button>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
