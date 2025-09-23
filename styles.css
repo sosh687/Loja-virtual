@@ -1,0 +1,100 @@
+:root{
+  --bg: #FBF6F1;
+  --card: #fff;
+  --accent: #ff6a3d;
+  --muted: #9b8f88;
+  --dark: #0f1724;
+  --teal: #0b6b5f;
+  --orange: #ff7a3d;
+  --radius: 18px;
+  --maxw: 1200px;
+  --shadow: 0 10px 30px rgba(16,24,40,0.12);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased}
+.container{max-width:var(--maxw);margin:36px auto;padding:18px}
+
+/* NAV */
+.navbar{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.85));padding:14px 22px;border-radius:14px;box-shadow:var(--shadow);margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:16px}
+.logo{font-weight:800;color:var(--accent);letter-spacing:1px}
+.nav-links a{margin:0 10px;color:var(--muted);text-decoration:none;font-weight:600}
+.nav-actions .icon{background:transparent;border:0;font-size:18px;cursor:pointer}
+
+/* HERO LAYOUT */
+.hero{display:grid;grid-template-columns:1fr 420px;gap:26px;align-items:start}
+.left{padding:12px}
+.eyebrow{color:var(--orange);font-weight:700;margin-bottom:8px}
+.title{font-family:'Playfair Display', serif;font-size:40px;line-height:1.02;margin:6px 0 12px}
+.lead{color:var(--muted);max-width:560px;margin-bottom:16px}
+.cta{display:flex;gap:12px}
+.btn{padding:10px 16px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.outline{background:transparent;border:1px solid rgba(255,106,61,0.12);color:var(--accent)}
+.btn.small{padding:6px 10px;border-radius:8px}
+.btn.full{width:100%;padding:12px;border-radius:12px;background:var(--accent);color:#fff;margin-top:10px}
+
+/* PROMOS */
+.promos{display:flex;gap:14px;margin-top:18px}
+.promo{flex:1;border-radius:12px;padding:18px;color:#fff;font-weight:800;display:flex;flex-direction:column;justify-content:center;min-height:84px}
+.teal{background:var(--teal)}
+.orange{background:var(--orange)}
+.promo-title{font-size:18px}
+.promo-sub{font-size:13px;opacity:0.9;margin-top:6px}
+
+/* SECTION TITLE */
+.section-title{margin-top:22px;font-size:20px;font-weight:700}
+
+/* GRID PRODUTOS */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:12px}
+.product{
+  background:var(--card);padding:12px;border-radius:12px;box-shadow:0 8px 22px rgba(16,24,40,0.04);text-align:left;
+  cursor: pointer;transition:transform .18s ease, box-shadow .18s ease;
+}
+.product:hover{transform:translateY(-6px);box-shadow:0 18px 44px rgba(16,24,40,0.08)}
+.product img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+.product .name{font-weight:700;margin:8px 0 4px}
+.product .cat{font-size:13px;color:var(--muted);margin-bottom:6px}
+.product .price{color:var(--accent);font-weight:800}
+
+/* RIGHT CARD */
+.right{position:relative}
+.card-hero{background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.card-photo{height:320px;border-radius:12px;background-image:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop&s=');background-size:cover;background-position:center}
+.card-info{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.p-name{font-weight:800}
+.p-meta{color:var(--muted);font-size:13px}
+.card-actions{display:flex;gap:8px}
+
+/* PHONE MOCKUP */
+.phone-mock{
+  position:absolute;right:-40px;top:-60px;width:240px;border-radius:28px;background:linear-gradient(180deg,#fff,#fff);box-shadow:0 20px 50px rgba(16,24,40,0.22);overflow:hidden;border:10px solid rgba(255,255,255,0.6)
+}
+.phone-top{height:10px;background:linear-gradient(90deg,rgba(0,0,0,0.02),rgba(0,0,0,0.03))}
+.phone-screen{padding:12px;background:#fff}
+.ps-header{text-align:center;font-weight:700;margin-bottom:8px}
+.checkout-line{display:flex;justify-content:space-between;font-size:13px;color:#444;margin-bottom:8px}
+.section-sub{font-weight:700;margin-top:8px;margin-bottom:6px}
+.ps-item{display:flex;justify-content:space-between;font-size:13px;padding:6px 0}
+.divider{height:1px;background:#efefef;margin:10px 0;border-radius:4px}
+.total{display:flex;justify-content:space-between;align-items:center}
+.phone-footer{display:flex;justify-content:center;padding-top:8px}
+.phone-footer img{width:36px;height:36px;border-radius:999px;margin:0 6px}
+
+/* RESPONSIVE */
+@media (max-width:1100px){
+  .hero{grid-template-columns:1fr 360px}
+  .grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:820px){
+  .container{padding:12px}
+  .hero{grid-template-columns:1fr}
+  .phone-mock{display:none}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .title{font-size:28px}
+}
+@media (max-width:420px){
+  .grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
