@@ -1,238 +1,271 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ModaStyle - Loja Virtual</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body class="bg-gray-50">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ModaStyle — Loja</title>
 
-  <!-- Header -->
-  <header class="bg-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <!-- Logo -->
-        <div class="flex items-center">
-          <div class="text-2xl font-bold text-orange-500">ModaStyle</div>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Custom tokens to match the soft beige aesthetic */
+    :root{
+      --beige-100: #fbf2ec;
+      --beige-200: #f6e8df;
+      --accent: #f97316; /* orange */
+      --muted: #8b7a6a;
+    }
+
+    /* Small utilities */
+    .hero-bg {
+      background: linear-gradient(180deg, rgba(250,244,241,1) 0%, rgba(252,247,244,1) 50%, rgba(255,255,255,1) 100%);
+    }
+
+    .card-smooth{
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(20,18,16,0.06);
+    }
+
+    /* Decorative rounded large container like the example */
+    .site-frame{
+      background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(252,247,244,1) 100%);
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 16px 50px rgba(20,18,16,0.06);
+    }
+
+    /* Phone mockup shadow */
+    .phone-mock {
+      border-radius: 36px;
+      box-shadow: 0 24px 60px rgba(10,10,10,0.12);
+    }
+
+    /* softer heading letter-spacing */
+    .display-serif{ font-family: "Playfair Display", serif; letter-spacing: -0.02em; }
+
+    /* small badge */
+    .badge-soft {
+      background: white;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(20,18,16,0.06);
+    }
+
+    /* rounded corner image inside hero */
+    .hero-image-frame{
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,249,244,1), rgba(250,244,241,1));
+      box-shadow: 0 12px 40px rgba(20,18,16,0.06);
+    }
+
+    /* responsive adjustments for very small screens */
+    @media (max-width:640px){
+      .display-serif { font-size: 2rem !important; line-height: 1.05 !important; }
+    }
+  </style>
+</head>
+<body class="bg-[color:var(--beige-100)] antialiased text-gray-800">
+
+  <!-- Top container that mimics the framed website screenshot -->
+  <div class="min-h-screen flex items-start justify-center py-12 px-6">
+    <div class="w-full max-w-7xl site-frame">
+
+      <!-- NAV / Header -->
+      <header class="flex items-center justify-between mb-10">
+        <div class="flex items-center gap-4">
+          <!-- small logo box -->
+          <div class="w-10 h-10 bg-[color:var(--accent)] rounded-md flex items-center justify-center text-white font-bold">M</div>
+          <div class="text-lg font-semibold">ModaStyle</div>
         </div>
 
-        <!-- Navigation -->
-        <nav class="hidden md:flex space-x-8">
-          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Início</a>
-          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Produtos</a>
-          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Sobre</a>
-          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Contato</a>
+        <nav class="hidden lg:flex items-center gap-8 text-sm text-[color:var(--muted)]">
+          <a href="#" class="hover:text-gray-900 transition">Início</a>
+          <a href="#" class="hover:text-gray-900 transition">Coleções</a>
+          <a href="#" class="hover:text-gray-900 transition">Novidades</a>
+          <a href="#" class="hover:text-gray-900 transition">Contato</a>
         </nav>
 
-        <!-- Icons -->
-        <div class="flex items-center space-x-4">
-          <button class="text-gray-700 hover:text-orange-500 transition-colors">
-            <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/search--v1.png" alt="Buscar" />
-          </button>
-
-          <button class="text-gray-700 hover:text-orange-500 transition-colors">
-            <img width="30" height="30" src="https://img.icons8.com/parakeet-line/48/user.png" alt="Usuário" />
-          </button>
-
-          <button onclick="toggleCart()" class="relative text-gray-700 hover:text-orange-500 transition-colors">
-            <img width="30" height="30" src="https://img.icons8.com/android/24/shopping-cart.png" alt="Carrinho" />
-            <span id="cart-count" class="cart-badge absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        <div class="flex items-center gap-4">
+          <button aria-label="buscar" class="p-2 rounded-md hover:bg-white/60 transition"><img src="https://img.icons8.com/ios/24/000000/search--v1.png" alt="buscar"></button>
+          <button aria-label="usuario" class="p-2 rounded-md hover:bg-white/60 transition"><img src="https://img.icons8.com/ios/24/000000/user--v1.png" alt="user"></button>
+          <button aria-label="carrinho" onclick="toggleCart()" class="relative p-2 rounded-md hover:bg-white/60 transition">
+            <img src="https://img.icons8.com/ios/24/000000/shopping-cart--v1.png" alt="cart">
+            <span class="absolute -top-1 -right-1 bg-[color:var(--accent)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
           </button>
         </div>
-      </div>
-    </div>
-  </header>
+      </header>
 
-  <!-- Hero Section -->
-  <section class="hero-gradient py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <h1 class="text-5xl font-bold text-gray-900 mb-6">
-            Moda que <span class="text-orange-500">Inspira</span> e <span class="text-green-500">Transforma</span>
-          </h1>
-          <p class="text-xl text-gray-600 mb-8">
-            Descubra as últimas tendências da moda com qualidade premium e preços incríveis. Sua nova coleção está aqui!
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <button class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg">Comprar Agora</button>
-            <button class="btn-secondary text-white px-8 py-4 rounded-full font-semibold text-lg">Ver Catálogo</button>
+      <!-- HERO GRID (left: content; right: image + phone mockup) -->
+      <section class="hero-bg p-10 rounded-2xl card-smooth mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- LEFT: headline + subtitle + actions -->
+          <div class="max-w-xl">
+            <div class="text-sm font-medium uppercase text-[color:var(--accent)] mb-4">New arrivals</div>
+            <h1 class="display-serif text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              Elegância contemporânea,<br>
+              feita para <span class="text-[color:var(--accent)]">você</span>.
+            </h1>
+            <p class="text-lg text-gray-600 mb-8">
+              Coleção primavera-outono com peças em tons terrosos, caimento perfeito e acabamento premium. Descubra looks atemporais que valorizam cada momento.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a class="inline-flex items-center gap-3 bg-[color:var(--accent)] hover:bg-[#ea6a09] text-white px-6 py-3 rounded-full font-semibold shadow-sm transition" href="#">
+                Comprar agora
+              </a>
+              <a class="inline-flex items-center gap-3 border border-gray-200 bg-white px-6 py-3 rounded-full font-semibold text-gray-800 hover:shadow transition" href="#">
+                Ver catálogo
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="flex justify-center">
-          <div class="w-80 h-96 bg-gradient-to-br from-orange-400 to-pink-400 rounded-3xl flex items-center justify-center text-white text-6xl">👗</div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Promo Cards -->
-  <section class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="promo-card bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-8 text-white">
-          <h3 class="text-2xl font-bold mb-4">Ofertas & Promoções</h3>
-          <p class="text-lg mb-6">Até 50% OFF em peças selecionadas</p>
-          <button class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">Ver Ofertas</button>
-        </div>
-        <div class="promo-card bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl p-8 text-white">
-          <h3 class="text-2xl font-bold mb-4">Coleção Verão</h3>
-          <p class="text-lg mb-6">Novidades fresquinhas chegando</p>
-          <button class="bg-white text-green-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">Descobrir</button>
-        </div>
-      </div>
-    </div>
-  </section>
+          <!-- RIGHT: framed image + phone mockup overlay -->
+          <div class="relative flex justify-center lg:justify-end">
+            <!-- large rounded image like the example (replace src with your hero-model image) -->
+            <div class="hero-image-frame w-80 h-96">
+              <!-- use your image file here: img/hero-model.jpg -->
+              <img src="img/hero-model.jpg" alt="Modelo de blusa marrom" class="w-full h-full object-cover">
+            </div>
 
-  <!-- Produtos em Destaque -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Produtos em Destaque</h2>
+            <!-- white badge overlapping bottom-left -->
+            <div class="absolute -left-8 -bottom-6 badge-soft">
+              <div class="text-xs text-[color:var(--muted)]">Destaque</div>
+              <div class="font-semibold text-gray-900">Nova Coleção • Outono 2025</div>
+            </div>
 
-      <!-- Saias (3 imagens) -->
-      <h3 class="text-2xl font-bold text-orange-500 mb-6">Saias</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/saia1.jpg" alt="Saia 1" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/saia2.jpg" alt="Saia 2" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/saia3.jpg" alt="Saia 3" class="w-full h-64 object-cover" />
-        </div>
-      </div>
+            <!-- phone mockup (simula o app na frente) -->
+            <div class="absolute -right-6 -bottom-12 phone-mock bg-white rounded-3xl w-56 h-96 overflow-hidden flex flex-col">
+              <!-- top bar -->
+              <div class="flex items-center justify-between px-3 py-2 border-b text-sm text-gray-600">
+                <div class="w-6 h-2 rounded bg-gray-200"></div>
+                <div>3:24</div>
+                <div class="w-6 h-2 rounded bg-gray-200"></div>
+              </div>
 
-      <!-- Tênis (3 imagens) -->
-      <h3 class="text-2xl font-bold text-orange-500 mb-6">Tênis</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/tenis1.jpg" alt="Tênis 1" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/tenis2.jpg" alt="Tênis 2" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/tenis3.jpg" alt="Tênis 3" class="w-full h-64 object-cover" />
-        </div>
-      </div>
+              <!-- mock cart items -->
+              <div class="p-3 flex-1 overflow-auto">
+                <div class="text-sm font-semibold mb-2">Seu carrinho</div>
 
-      <!-- Acessórios (3 imagens) -->
-      <h3 class="text-2xl font-bold text-orange-500 mb-6">Acessórios</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/brinco.jpg" alt="Brinco" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/colar.jpg" alt="Colar" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/pulseira.jpg" alt="Pulseira" class="w-full h-64 object-cover" />
-        </div>
-      </div>
-
-      <!-- Calças (3 imagens) -->
-      <h3 class="text-2xl font-bold text-orange-500 mb-6">Calças</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/calça1.jpg" alt="Calça 1" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/calça2.jpg" alt="Calça 2" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/calça3.jpg" alt="Calça 3" class="w-full h-64 object-cover" />
-        </div>
-      </div>
-
-      <!-- Vestidos (3 imagens) -->
-      <h3 class="text-2xl font-bold text-orange-500 mb-6">Vestidos</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/vestido1.jpg" alt="Vestido 1" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/vestido2.jpg" alt="Vestido 2" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/vestido3.jpg" alt="Vestido 3" class="w-full h-64 object-cover" />
-        </div>
-      </div>
-
-      <!-- Blusas (3 imagens) -->
-      <h3 class="text-2xl font-bold text-orange-500 mb-6">Blusas</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/blusa1.jpg" alt="Blusa 1" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/blusa2.jpg" alt="Blusa 2" class="w-full h-64 object-cover" />
-        </div>
-        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
-          <img src="img/blusa3.png" alt="Blusa 3" class="w-full h-64 object-cover" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mobile App Preview -->
-  <section class="py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <h2 class="text-4xl font-bold text-gray-900 mb-6">Compre pelo App</h2>
-          <p class="text-xl text-gray-600 mb-8">
-            Experiência de compra otimizada para mobile. Carrinho inteligente, pagamento rápido e entrega expressa.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <button class="btn-primary text-white px-6 py-3 rounded-full font-semibold">📱 Download App</button>
-            <button class="border-2 border-orange-500 text-orange-500 px-6 py-3 rounded-full font-semibold hover:bg-orange-500 hover:text-white transition-colors">Saiba Mais</button>
-          </div>
-        </div>
-        <div class="flex justify-center">
-          <div class="mobile-preview w-80 h-96 text-white">
-            <div class="bg-white rounded-2xl p-6 text-gray-900 h-full">
-              <h3 class="text-lg font-bold mb-4 text-center">Seu Carrinho</h3>
-              <div class="space-y-4">
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center">👕</div>
-                    <div>
-                      <p class="font-semibold">Camiseta Premium</p>
-                      <p class="text-sm text-gray-600">Tamanho M</p>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 bg-[color:var(--beige-200)] rounded-md flex items-center justify-center">👗</div>
+                      <div class="text-sm">
+                        <div class="font-medium">Vestido Floral</div>
+                        <div class="text-xs text-gray-500">P • Bege</div>
+                      </div>
                     </div>
+                    <div class="font-semibold text-[color:var(--accent)]">R$ 149,90</div>
                   </div>
-                  <p class="font-bold text-orange-500">R$ 89,90</p>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-pink-200 rounded-lg flex items-center justify-center">👗</div>
-                    <div>
-                      <p class="font-semibold">Vestido Floral</p>
-                      <p class="text-sm text-gray-600">Tamanho P</p>
+
+                  <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 bg-pink-50 rounded-md flex items-center justify-center">👕</div>
+                      <div class="text-sm">
+                        <div class="font-medium">Camiseta Premium</div>
+                        <div class="text-xs text-gray-500">M • Algodão</div>
+                      </div>
                     </div>
+                    <div class="font-semibold text-[color:var(--accent)]">R$ 89,90</div>
                   </div>
-                  <p class="font-bold text-orange-500">R$ 149,90</p>
                 </div>
               </div>
-              <div class="mt-6 pt-4 border-t">
-                <div class="flex justify-between items-center mb-4">
-                  <span class="text-lg font-bold">Total:</span>
-                  <span class="text-2xl font-bold text-orange-500">R$ 239,80</span>
+
+              <div class="p-3 border-t">
+                <div class="flex justify-between items-center mb-3">
+                  <div class="text-sm text-gray-600">Total</div>
+                  <div class="font-bold text-[color:var(--accent)]">R$ 239,80</div>
                 </div>
-                <button class="w-full btn-primary text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
+                <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full font-semibold">Finalizar compra</button>
               </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Promo small cards below hero -->
+      <section class="mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 card-smooth bg-[#15494b] rounded-2xl text-white flex items-center justify-between">
+            <div>
+              <div class="text-xs uppercase opacity-70">Ofertas & Promo</div>
+              <div class="text-xl font-semibold mt-2">Até 50% OFF em peças selecionadas</div>
+            </div>
+            <div>
+              <button class="bg-white text-[#15494b] px-4 py-2 rounded-full font-semibold">Ver ofertas</button>
+            </div>
+          </div>
+
+          <div class="p-6 card-smooth bg-gradient-to-r from-[#2aa46b] to-[#2fa6e6] rounded-2xl text-white flex items-center justify-between">
+            <div>
+              <div class="text-xs uppercase opacity-70">Coleção</div>
+              <div class="text-xl font-semibold mt-2">Verão • Novidades</div>
+            </div>
+            <div>
+              <button class="bg-white text-[#2aa46b] px-4 py-2 rounded-full font-semibold">Descobrir</button>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- Cart Sidebar -->
+      <!-- Grid de produtos (exemplo cheio já no estilo) -->
+      <section class="pb-12">
+        <h3 class="text-2xl font-semibold text-gray-900 mb-6">Produtos em Destaque</h3>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <!-- product card (replicar/trocar imagens) -->
+          <div class="bg-white rounded-xl p-4 card-smooth">
+            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
+              <img src="img/vestido1.jpg" alt="Produto" class="w-full h-full object-cover">
+            </div>
+            <div class="text-sm font-medium">Vestido Longo</div>
+            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 179,00</div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 card-smooth">
+            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
+              <img src="img/saia1.jpg" alt="Produto" class="w-full h-full object-cover">
+            </div>
+            <div class="text-sm font-medium">Saia Plissada</div>
+            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 129,00</div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 card-smooth">
+            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
+              <img src="img/tenis1.jpg" alt="Produto" class="w-full h-full object-cover">
+            </div>
+            <div class="text-sm font-medium">Tênis Casual</div>
+            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 199,00</div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 card-smooth">
+            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
+              <img src="img/colar.jpg" alt="Produto" class="w-full h-full object-cover">
+            </div>
+            <div class="text-sm font-medium">Colar Dourado</div>
+            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 69,00</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="pt-8 border-t mt-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="text-sm text-gray-600">&copy; 2025 ModaStyle — Todos os direitos reservados.</div>
+          <div class="text-sm text-gray-600">Desenvolvido com carinho • Minimal E-commerce</div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Cart sidebar (basic) -->
   <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
     <div class="p-6 border-b">
       <div class="flex justify-between items-center">
@@ -246,39 +279,27 @@
     <div id="cart-footer" class="p-6 border-t bg-gray-50">
       <div class="flex justify-between items-center mb-4">
         <span class="text-lg font-bold">Total:</span>
-        <span id="cart-total" class="text-2xl font-bold text-orange-500">R$ 0,00</span>
+        <span id="cart-total" class="text-2xl font-bold text-[color:var(--accent)]">R$ 0,00</span>
       </div>
-      <button class="w-full btn-primary text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
+      <button class="w-full bg-[color:var(--accent)] text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
     </div>
   </div>
 
-  <!-- Cart Overlay -->
-  <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleCart()"></div>
+  <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-40 hidden" onclick="toggleCart()"></div>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 py-6 mt-16">
-    <div class="max-w-7xl mx-auto px-4 text-center text-gray-300">
-      <p>&copy; 2025 ModaStyle. Todos os direitos reservados.</p>
-    </div>
-  </footer>
-
-  <!-- External script (se tiver). Depois do script externo colocamos fallback/toggle simples -->
-  <script src="script.js"></script>
-
-  <!-- Small inline script para garantir toggle do carrinho caso o script.js não contenha a função -->
   <script>
-    function toggleCart() {
+    function toggleCart(){
       const sidebar = document.getElementById('cart-sidebar');
       const overlay = document.getElementById('cart-overlay');
-      const isHidden = sidebar.classList.contains('translate-x-full');
-      if (isHidden) {
-        sidebar.classList.remove('translate-x-full');
-        overlay.classList.remove('hidden');
-      } else {
+      const opened = !sidebar.classList.contains('translate-x-full');
+      if(opened){
         sidebar.classList.add('translate-x-full');
         overlay.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
       }
     }
   </script>
 </body>
-</html> quero esse codigo que vc fez por ultimo dentro desse aqui 
+</html>
