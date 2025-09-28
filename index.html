@@ -1,114 +1,284 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PialMart — Demo</title>
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ModaStyle - Loja Virtual</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div class="container">
-    <!-- NAVBAR -->
-    <header class="navbar">
-      <div class="brand">
-        <div class="logo">PIAL<span>MART</span></div>
-        <nav class="nav-links">
-          <a href="#">About</a>
-          <a href="#">Collections</a>
-          <a href="#">Services</a>
-          <a href="#">Colors</a>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <div class="text-2xl font-bold text-orange-500">ModaStyle</div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="hidden md:flex space-x-8">
+          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Início</a>
+          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Produtos</a>
+          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Sobre</a>
+          <a href="#" class="text-gray-700 hover:text-orange-500 transition-colors">Contato</a>
         </nav>
+
+        <!-- Icons -->
+        <div class="flex items-center space-x-4">
+          <button class="text-gray-700 hover:text-orange-500 transition-colors">
+            <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/search--v1.png" alt="Buscar" />
+          </button>
+
+          <button class="text-gray-700 hover:text-orange-500 transition-colors">
+            <img width="30" height="30" src="https://img.icons8.com/parakeet-line/48/user.png" alt="Usuário" />
+          </button>
+
+          <button onclick="toggleCart()" class="relative text-gray-700 hover:text-orange-500 transition-colors">
+            <img width="30" height="30" src="https://img.icons8.com/android/24/shopping-cart.png" alt="Carrinho" />
+            <span id="cart-count" class="cart-badge absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+          </button>
+        </div>
       </div>
-      <div class="nav-actions">
-        <button class="icon">🔍</button>
-        <button class="icon">🛒</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h1 class="text-5xl font-bold text-gray-900 mb-6">
+            Moda que <span class="text-orange-500">Inspira</span> e <span class="text-green-500">Transforma</span>
+          </h1>
+          <p class="text-xl text-gray-600 mb-8">
+            Descubra as últimas tendências da moda com qualidade premium e preços incríveis. Sua nova coleção está aqui!
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg">Comprar Agora</button>
+            <button class="btn-secondary text-white px-8 py-4 rounded-full font-semibold text-lg">Ver Catálogo</button>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <div class="w-80 h-96 bg-gradient-to-br from-orange-400 to-pink-400 rounded-3xl flex items-center justify-center text-white text-6xl">👗</div>
+        </div>
       </div>
-    </header>
+    </div>
+  </section>
 
-    <!-- HERO -->
-    <main class="hero">
-      <section class="left">
-        <div class="eyebrow">Whateflur</div>
-        <h1 class="title">Crust Payhelfi, <br> Mome's Lammen!</h1>
-        <p class="lead">Você cadecnatry meplesre for lintilruding tweyon coletret your alrra and emcise products.</p>
-
-        <div class="cta">
-          <button class="btn primary">⬇ Download</button>
-          <button class="btn outline">Read More</button>
+  <!-- Promo Cards -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="promo-card bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-8 text-white">
+          <h3 class="text-2xl font-bold mb-4">Ofertas & Promoções</h3>
+          <p class="text-lg mb-6">Até 50% OFF em peças selecionadas</p>
+          <button class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">Ver Ofertas</button>
         </div>
+        <div class="promo-card bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl p-8 text-white">
+          <h3 class="text-2xl font-bold mb-4">Coleção Verão</h3>
+          <p class="text-lg mb-6">Novidades fresquinhas chegando</p>
+          <button class="bg-white text-green-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">Descobrir</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="promos">
-          <div class="promo teal">
-            <div class="promo-title">Soft &<br>Promotisins</div>
-            <div class="promo-sub">$65.000</div>
+  <!-- Produtos em Destaque -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Produtos em Destaque</h2>
+
+      <!-- Saias (3 imagens) -->
+      <h3 class="text-2xl font-bold text-orange-500 mb-6">Saias</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/saia1.jpg" alt="Saia 1" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/saia2.jpg" alt="Saia 2" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/saia3.jpg" alt="Saia 3" class="w-full h-64 object-cover" />
+        </div>
+      </div>
+
+      <!-- Tênis (3 imagens) -->
+      <h3 class="text-2xl font-bold text-orange-500 mb-6">Tênis</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/tenis1.jpg" alt="Tênis 1" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/tenis2.jpg" alt="Tênis 2" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/tenis3.jpg" alt="Tênis 3" class="w-full h-64 object-cover" />
+        </div>
+      </div>
+
+      <!-- Acessórios (3 imagens) -->
+      <h3 class="text-2xl font-bold text-orange-500 mb-6">Acessórios</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/brinco.jpg" alt="Brinco" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/colar.jpg" alt="Colar" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/pulseira.jpg" alt="Pulseira" class="w-full h-64 object-cover" />
+        </div>
+      </div>
+
+      <!-- Calças (3 imagens) -->
+      <h3 class="text-2xl font-bold text-orange-500 mb-6">Calças</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/calça1.jpg" alt="Calça 1" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/calça2.jpg" alt="Calça 2" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/calça3.jpg" alt="Calça 3" class="w-full h-64 object-cover" />
+        </div>
+      </div>
+
+      <!-- Vestidos (3 imagens) -->
+      <h3 class="text-2xl font-bold text-orange-500 mb-6">Vestidos</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/vestido1.jpg" alt="Vestido 1" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/vestido2.jpg" alt="Vestido 2" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/vestido3.jpg" alt="Vestido 3" class="w-full h-64 object-cover" />
+        </div>
+      </div>
+
+      <!-- Blusas (3 imagens) -->
+      <h3 class="text-2xl font-bold text-orange-500 mb-6">Blusas</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/blusa1.jpg" alt="Blusa 1" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/blusa2.jpg" alt="Blusa 2" class="w-full h-64 object-cover" />
+        </div>
+        <div class="bg-gray-50 rounded-lg overflow-hidden shadow">
+          <img src="img/blusa3.png" alt="Blusa 3" class="w-full h-64 object-cover" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile App Preview -->
+  <section class="py-16 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900 mb-6">Compre pelo App</h2>
+          <p class="text-xl text-gray-600 mb-8">
+            Experiência de compra otimizada para mobile. Carrinho inteligente, pagamento rápido e entrega expressa.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button class="btn-primary text-white px-6 py-3 rounded-full font-semibold">📱 Download App</button>
+            <button class="border-2 border-orange-500 text-orange-500 px-6 py-3 rounded-full font-semibold hover:bg-orange-500 hover:text-white transition-colors">Saiba Mais</button>
           </div>
-          <div class="promo orange">
-            <div class="promo-title">Sniners<br>Cumracy</div>
-            <div class="promo-sub">$22.900</div>
-          </div>
         </div>
-
-        <h3 class="section-title">Gomall four Picy Bladfies</h3>
-
-        <div id="product-grid" class="grid">
-          <!-- produtos inseridos pelo script.js -->
-        </div>
-      </section>
-
-      <aside class="right">
-        <div class="card-hero">
-          <div class="card-photo" role="img" aria-label="modelo"></div>
-          <div class="card-info">
-            <div>
-              <div class="p-name">Nome do Produto</div>
-              <div class="p-meta">Categoria • R$ 249</div>
-            </div>
-            <div class="card-actions">
-              <button class="btn outline small">❤</button>
-              <button class="btn small">Comprar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- PHONE MOCKUP -->
-        <div class="phone-mock">
-          <div class="phone-top"></div>
-          <div class="phone-screen">
-            <div class="ps-header">Páx Asuples</div>
-
-            <div class="checkout-line">
-              <div class="item">Coon Lana Flat Foel</div>
-              <div class="price">$49.99</div>
-            </div>
-
-            <div class="section-sub">Product Detants</div>
-            <div class="ps-item"><span>Bowette</span><span>$8.49</span></div>
-            <div class="ps-item"><span>Delidmme</span><span>$17.40</span></div>
-
-            <div class="divider"></div>
-            <div class="total">
-              <span>Total</span>
-              <strong>$24,070.81</strong>
-            </div>
-
-            <button class="btn full">Carry Now</button>
-
-            <div class="phone-footer">
-              <div class="icons">
-                <img src="https://picsum.photos/seed/a/40/40" alt="">
-                <img src="https://picsum.photos/seed/b/40/40" alt="">
-                <img src="https://picsum.photos/seed/c/40/40" alt="">
+        <div class="flex justify-center">
+          <div class="mobile-preview w-80 h-96 text-white">
+            <div class="bg-white rounded-2xl p-6 text-gray-900 h-full">
+              <h3 class="text-lg font-bold mb-4 text-center">Seu Carrinho</h3>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center">👕</div>
+                    <div>
+                      <p class="font-semibold">Camiseta Premium</p>
+                      <p class="text-sm text-gray-600">Tamanho M</p>
+                    </div>
+                  </div>
+                  <p class="font-bold text-orange-500">R$ 89,90</p>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-pink-200 rounded-lg flex items-center justify-center">👗</div>
+                    <div>
+                      <p class="font-semibold">Vestido Floral</p>
+                      <p class="text-sm text-gray-600">Tamanho P</p>
+                    </div>
+                  </div>
+                  <p class="font-bold text-orange-500">R$ 149,90</p>
+                </div>
+              </div>
+              <div class="mt-6 pt-4 border-t">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="text-lg font-bold">Total:</span>
+                  <span class="text-2xl font-bold text-orange-500">R$ 239,80</span>
+                </div>
+                <button class="w-full btn-primary text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
               </div>
             </div>
           </div>
         </div>
-      </aside>
-    </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+    <div class="p-6 border-b">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Carrinho</h2>
+        <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">✖</button>
+      </div>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+      <p class="text-gray-500 text-center">Seu carrinho está vazio</p>
+    </div>
+    <div id="cart-footer" class="p-6 border-t bg-gray-50">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-lg font-bold">Total:</span>
+        <span id="cart-total" class="text-2xl font-bold text-orange-500">R$ 0,00</span>
+      </div>
+      <button class="w-full btn-primary text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
+    </div>
   </div>
 
+  <!-- Cart Overlay -->
+  <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleCart()"></div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 py-6 mt-16">
+    <div class="max-w-7xl mx-auto px-4 text-center text-gray-300">
+      <p>&copy; 2025 ModaStyle. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- External script (se tiver). Depois do script externo colocamos fallback/toggle simples -->
   <script src="script.js"></script>
+
+  <!-- Small inline script para garantir toggle do carrinho caso o script.js não contenha a função -->
+  <script>
+    function toggleCart() {
+      const sidebar = document.getElementById('cart-sidebar');
+      const overlay = document.getElementById('cart-overlay');
+      const isHidden = sidebar.classList.contains('translate-x-full');
+      if (isHidden) {
+        sidebar.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+  </script>
 </body>
-</html>
-
-
+</html> quero esse codigo que vc fez por ultimo dentro desse aqui 
