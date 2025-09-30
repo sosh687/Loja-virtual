@@ -1,84 +1,49 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ModaStyle — Loja</title>
+  <meta name="description" content="ModaStyle — Coleções contemporâneas.">
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* Custom tokens to match the soft beige aesthetic */
     :root{
       --beige-100: #fbf2ec;
       --beige-200: #f6e8df;
-      --accent: #f97316; /* orange */
+      --accent: #f97316;
       --muted: #8b7a6a;
     }
-
-    /* Small utilities */
-    .hero-bg {
-      background: linear-gradient(180deg, rgba(250,244,241,1) 0%, rgba(252,247,244,1) 50%, rgba(255,255,255,1) 100%);
-    }
-
-    .card-smooth{
-      border-radius: 18px;
-      box-shadow: 0 8px 30px rgba(20,18,16,0.06);
-    }
-
-    /* Decorative rounded large container like the example */
-    .site-frame{
-      background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(252,247,244,1) 100%);
-      border-radius: 14px;
-      padding: 28px;
-      box-shadow: 0 16px 50px rgba(20,18,16,0.06);
-    }
-
-    /* Phone mockup shadow */
-    .phone-mock {
-      border-radius: 36px;
-      box-shadow: 0 24px 60px rgba(10,10,10,0.12);
-    }
-
-    /* softer heading letter-spacing */
+    .hero-bg { background: linear-gradient(180deg, rgba(250,244,241,1) 0%, rgba(252,247,244,1) 50%, rgba(255,255,255,1) 100%); }
+    .card-smooth{ border-radius: 18px; box-shadow: 0 8px 30px rgba(20,18,16,0.06); }
+    .site-frame{ background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(252,247,244,1) 100%); border-radius: 14px; padding: 28px; box-shadow: 0 16px 50px rgba(20,18,16,0.06); }
+    .phone-mock { border-radius: 36px; box-shadow: 0 24px 60px rgba(10,10,10,0.12); }
     .display-serif{ font-family: "Playfair Display", serif; letter-spacing: -0.02em; }
-
-    /* small badge */
-    .badge-soft {
-      background: white;
-      border-radius: 12px;
-      padding: 10px 14px;
-      box-shadow: 0 8px 24px rgba(20,18,16,0.06);
-    }
-
-    /* rounded corner image inside hero */
-    .hero-image-frame{
-      border-radius: 22px;
-      overflow: hidden;
-      background: linear-gradient(180deg, rgba(255,249,244,1), rgba(250,244,241,1));
-      box-shadow: 0 12px 40px rgba(20,18,16,0.06);
-    }
-
-    /* responsive adjustments for very small screens */
-    @media (max-width:640px){
-      .display-serif { font-size: 2rem !important; line-height: 1.05 !important; }
-    }
+    .badge-soft { background: white; border-radius: 12px; padding: 10px 14px; box-shadow: 0 8px 24px rgba(20,18,16,0.06); }
+    .hero-image-frame{ border-radius: 22px; overflow: hidden; background: linear-gradient(180deg, rgba(255,249,244,1), rgba(250,244,241,1)); box-shadow: 0 12px 40px rgba(20,18,16,0.06); }
+    .toast { position: fixed; right: 20px; bottom: 20px; background: var(--accent); color: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); display:none; z-index: 60; }
+    @media (max-width:640px){ .display-serif { font-size: 2rem !important; line-height: 1.05 !important; } }
   </style>
 </head>
 <body class="bg-[color:var(--beige-100)] antialiased text-gray-800">
 
-  <!-- Top container that mimics the framed website screenshot -->
+  <!-- Toast -->
+  <div id="toast" class="toast">Produto adicionado ✅</div>
+
+  <!-- Top container -->
   <div class="min-h-screen flex items-start justify-center py-12 px-6">
     <div class="w-full max-w-7xl site-frame">
 
       <!-- NAV / Header -->
       <header class="flex items-center justify-between mb-10">
         <div class="flex items-center gap-4">
-          <!-- small logo box -->
           <div class="w-10 h-10 bg-[color:var(--accent)] rounded-md flex items-center justify-center text-white font-bold">M</div>
           <div class="text-lg font-semibold">ModaStyle</div>
         </div>
@@ -91,14 +56,39 @@
         </nav>
 
         <div class="flex items-center gap-4">
-          <button aria-label="buscar" class="p-2 rounded-md hover:bg-white/60 transition"><img src="https://img.icons8.com/ios/24/000000/search--v1.png" alt="buscar"></button>
-          <button aria-label="usuario" class="p-2 rounded-md hover:bg-white/60 transition"><img src="https://img.icons8.com/ios/24/000000/user--v1.png" alt="user"></button>
-          <button aria-label="carrinho" onclick="toggleCart()" class="relative p-2 rounded-md hover:bg-white/60 transition">
-            <img src="https://img.icons8.com/ios/24/000000/shopping-cart--v1.png" alt="cart">
-            <span class="absolute -top-1 -right-1 bg-[color:var(--accent)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+          <!-- Search toggle -->
+          <button id="btn-search" aria-label="buscar" class="p-2 rounded-md hover:bg-white/60 transition">
+            <img src="https://img.icons8.com/ios/24/000000/search--v1.png" alt="buscar">
           </button>
+
+          <!-- User dropdown -->
+          <div class="relative">
+            <button id="btn-user" aria-label="usuario" class="p-2 rounded-md hover:bg-white/60 transition">
+              <img src="https://img.icons8.com/ios/24/000000/user--v1.png" alt="user">
+            </button>
+            <div id="dropdown-user" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg py-2 z-40">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Entrar / Criar conta</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meus pedidos</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
+            </div>
+          </div>
+
+          <!-- Cart button -->
+          <button id="btn-cart" aria-label="carrinho" class="relative p-2 rounded-md hover:bg-white/60 transition" onclick="toggleCart()">
+            <img src="https://img.icons8.com/ios/24/000000/shopping-cart--v1.png" alt="cart">
+            <span id="cart-count" class="absolute -top-1 -right-1 bg-[color:var(--accent)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          </button>
+
+          <!-- Dark mode -->
+          <button id="btn-dark" class="p-2 rounded-md hover:bg-white/60 transition" title="Toggle dark mode">🌙</button>
         </div>
       </header>
+
+      <!-- Search bar overlay (hidden by default) -->
+      <div id="search-bar" class="hidden mb-6">
+        <input id="search-input" type="text" placeholder="Buscar produtos..." class="w-full p-3 border rounded-lg shadow-sm">
+        <div id="search-suggestions" class="mt-2"></div>
+      </div>
 
       <!-- HERO GRID (left: content; right: image + phone mockup) -->
       <section class="hero-bg p-10 rounded-2xl card-smooth mb-12">
@@ -126,31 +116,25 @@
 
           <!-- RIGHT: framed image + phone mockup overlay -->
           <div class="relative flex justify-center lg:justify-end">
-            <!-- large rounded image like the example (replace src with your hero-model image) -->
             <div class="hero-image-frame w-80 h-96">
-              <!-- use your image file here: img/hero-model.jpg -->
-              <img src="img/hero-model.jpg" alt="Modelo de blusa marrom" class="w-full h-full object-cover">
+              <img src="img/modelo1.jpg" alt="Modelo de blusa marrom" class="w-full h-full object-cover">
             </div>
 
-            <!-- white badge overlapping bottom-left -->
             <div class="absolute -left-8 -bottom-6 badge-soft">
               <div class="text-xs text-[color:var(--muted)]">Destaque</div>
               <div class="font-semibold text-gray-900">Nova Coleção • Outono 2025</div>
             </div>
 
-            <!-- phone mockup (simula o app na frente) -->
+            <!-- phone mockup (visual only) -->
             <div class="absolute -right-6 -bottom-12 phone-mock bg-white rounded-3xl w-56 h-96 overflow-hidden flex flex-col">
-              <!-- top bar -->
               <div class="flex items-center justify-between px-3 py-2 border-b text-sm text-gray-600">
                 <div class="w-6 h-2 rounded bg-gray-200"></div>
                 <div>3:24</div>
                 <div class="w-6 h-2 rounded bg-gray-200"></div>
               </div>
 
-              <!-- mock cart items -->
               <div class="p-3 flex-1 overflow-auto">
                 <div class="text-sm font-semibold mb-2">Seu carrinho</div>
-
                 <div class="space-y-3">
                   <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
                     <div class="flex items-center gap-3">
@@ -162,7 +146,6 @@
                     </div>
                     <div class="font-semibold text-[color:var(--accent)]">R$ 149,90</div>
                   </div>
-
                   <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
                     <div class="flex items-center gap-3">
                       <div class="w-10 h-10 bg-pink-50 rounded-md flex items-center justify-center">👕</div>
@@ -214,85 +197,199 @@
         </div>
       </section>
 
-      <!-- Grid de produtos (exemplo cheio já no estilo) -->
+      <!-- Grid de produtos (com botões e data attributes para JS) -->
       <section class="pb-12">
         <h3 class="text-2xl font-semibold text-gray-900 mb-6">Produtos em Destaque</h3>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          <!-- product card (replicar/trocar imagens) -->
-          <div class="bg-white rounded-xl p-4 card-smooth">
+        <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <!-- Each card preserved visual; I added buttons and data attributes for JS -->
+          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="1" data-name="Vestido Longo" data-price="179.00" data-img="img/vestido1.jpg">
             <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/vestido1.jpg" alt="Produto" class="w-full h-full object-cover">
+              <img src="img/vestido1.jpg" alt="Vestido Longo" class="w-full h-full object-cover">
             </div>
             <div class="text-sm font-medium">Vestido Longo</div>
             <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 179,00</div>
+            <div class="mt-3 flex gap-2">
+              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
+              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
+            </div>
           </div>
 
-          <div class="bg-white rounded-xl p-4 card-smooth">
+          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="2" data-name="Saia Plissada" data-price="129.00" data-img="img/saia1.jpg">
             <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/saia1.jpg" alt="Produto" class="w-full h-full object-cover">
+              <img src="img/saia1.jpg" alt="Saia Plissada" class="w-full h-full object-cover">
             </div>
             <div class="text-sm font-medium">Saia Plissada</div>
             <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 129,00</div>
+            <div class="mt-3 flex gap-2">
+              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
+              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
+            </div>
           </div>
 
-          <div class="bg-white rounded-xl p-4 card-smooth">
+          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="3" data-name="Tênis Casual" data-price="199.00" data-img="img/tenis1.jpg">
             <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/tenis1.jpg" alt="Produto" class="w-full h-full object-cover">
+              <img src="img/tenis1.jpg" alt="Tênis Casual" class="w-full h-full object-cover">
             </div>
             <div class="text-sm font-medium">Tênis Casual</div>
             <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 199,00</div>
+            <div class="mt-3 flex gap-2">
+              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
+              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
+            </div>
           </div>
 
-          <div class="bg-white rounded-xl p-4 card-smooth">
+          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="4" data-name="Colar Dourado" data-price="69.00" data-img="img/colar.jpg">
             <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/colar.jpg" alt="Produto" class="w-full h-full object-cover">
+              <img src="img/colar.jpg" alt="Colar Dourado" class="w-full h-full object-cover">
             </div>
             <div class="text-sm font-medium">Colar Dourado</div>
             <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 69,00</div>
+            <div class="mt-3 flex gap-2">
+              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
+              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
+            </div>
           </div>
+
         </div>
       </section>
 
-      <!-- Footer -->
-      <footer class="pt-8 border-t mt-8">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div class="text-sm text-gray-600">&copy; 2025 ModaStyle — Todos os direitos reservados.</div>
-          <div class="text-sm text-gray-600">Desenvolvido com carinho • Minimal E-commerce</div>
-        </div>
-      </footer>
+      <!-- Ícones das redes sociais -->
+<div class="flex items-center gap-4 text-sm text-gray-600">
+  <a href="https://instagram.com/seuusuario" target="_blank" rel="noopener" aria-label="Instagram">
+    <img src="img/instagram.png" alt="Instagram" class="w-5 h-5">
+  </a>
+  <a href="https://facebook.com/seuusuario" target="_blank" rel="noopener" aria-label="Facebook">
+    <img src="img/facebook.png" alt="Facebook" class="w-5 h-5">
+  </a>
+  <a href="https://tiktok.com/@seuusuario" target="_blank" rel="noopener" aria-label="TikTok">
+    <img src="img/tiktok.png" alt="TikTok" class="w-5 h-5">
+  </a>
+  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <img src="img/whatsapp.png" alt="WhatsApp" class="w-5 h-5">
+  </a>
+</div>
 
-    </div>
-  </div>
+<!-- Links de contato como texto -->
+<div class="flex items-center gap-4 text-sm text-gray-600 mt-2">
+  <a href="https://instagram.com/seuusuario" target="_blank" rel="noopener">Instagram</a>
+  <a href="https://facebook.com/seuusuario" target="_blank" rel="noopener">Facebook</a>
+  <a href="https://tiktok.com/@seuusuario" target="_blank" rel="noopener">TikTok</a>
+  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener">WhatsApp</a>
+  <a href="mailto:contato@modastyle.com">contato@modastyle.com</a>
+</div>
 
-  <!-- Cart sidebar (basic) -->
-  <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+  <!-- Cart sidebar -->
+  <aside id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
     <div class="p-6 border-b">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl font-bold">Carrinho</h2>
         <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">✖</button>
       </div>
     </div>
+
     <div id="cart-items" class="flex-1 overflow-y-auto p-6">
       <p class="text-gray-500 text-center">Seu carrinho está vazio</p>
     </div>
-    <div id="cart-footer" class="p-6 border-t bg-gray-50">
+
+    <div class="p-6 border-t bg-gray-50">
       <div class="flex justify-between items-center mb-4">
         <span class="text-lg font-bold">Total:</span>
         <span id="cart-total" class="text-2xl font-bold text-[color:var(--accent)]">R$ 0,00</span>
       </div>
-      <button class="w-full bg-[color:var(--accent)] text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
+      <div class="flex gap-2">
+        <button id="checkout-btn" class="w-full bg-[color:var(--accent)] text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
+      </div>
     </div>
-  </div>
-
+  </aside>
   <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-40 hidden" onclick="toggleCart()"></div>
 
+  <!-- Chat floating (example) -->
+  <a href="https://wa.me/5511999999999" target="_blank" class="fixed right-6 bottom-6 bg-[color:var(--accent)] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50" title="Fale conosco">
+    💬
+  </a>
+
   <script>
-    function toggleCart(){
+    /* -------------------------
+       Utilities & state
+       ------------------------- */
+    const toastEl = document.getElementById('toast');
+    function showToast(msg='Feito') {
+      toastEl.textContent = msg;
+      toastEl.style.display = 'block';
+      setTimeout(()=> toastEl.style.display = 'none', 1800);
+    }
+
+    // Cart state persisted in localStorage
+    let cart = JSON.parse(localStorage.getItem('modastyle_cart')||'[]');
+    let wishlist = JSON.parse(localStorage.getItem('modastyle_wishlist')||'[]');
+
+    /* -------------------------
+       Dark mode
+       ------------------------- */
+    const btnDark = document.getElementById('btn-dark');
+    btnDark.addEventListener('click', ()=> {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    /* -------------------------
+       User dropdown
+       ------------------------- */
+    document.getElementById('btn-user').addEventListener('click', ()=> {
+      document.getElementById('dropdown-user').classList.toggle('hidden');
+    });
+    // close user dropdown when clicking outside
+    window.addEventListener('click', (e)=> {
+      if (!e.target.closest('#btn-user') && !e.target.closest('#dropdown-user')) {
+        document.getElementById('dropdown-user').classList.add('hidden');
+      }
+    });
+
+    /* -------------------------
+       Search toggle & behavior
+       ------------------------- */
+    const btnSearch = document.getElementById('btn-search');
+    const searchBar = document.getElementById('search-bar');
+    const searchInput = document.getElementById('search-input');
+    const searchSuggestions = document.getElementById('search-suggestions');
+
+    btnSearch.addEventListener('click', ()=> searchBar.classList.toggle('hidden'));
+    // build product list for suggestions
+    function getAllProducts() {
+      return Array.from(document.querySelectorAll('.product-card')).map(card => ({
+        id: card.dataset.id,
+        name: card.dataset.name,
+        price: parseFloat(card.dataset.price),
+        img: card.dataset.img
+      }));
+    }
+    searchInput?.addEventListener('input', ()=> {
+      const q = (searchInput.value||'').toLowerCase().trim();
+      const matches = getAllProducts().filter(p => p.name.toLowerCase().includes(q));
+      searchSuggestions.innerHTML = matches.map(p => `
+        <div class="p-2 border rounded mb-2 flex items-center justify-between">
+          <div><strong>${p.name}</strong><div class="text-xs text-gray-500">R$ ${p.price.toFixed(2)}</div></div>
+          <div class="flex flex-col gap-1">
+            <button class="px-2 py-1 bg-[color:var(--accent)] text-white rounded-sm add-from-search" data-id="${p.id}">Adicionar</button>
+          </div>
+        </div>
+      `).join('');
+      // bind add-from-search buttons
+      document.querySelectorAll('.add-from-search').forEach(b=> b.addEventListener('click', (ev) => {
+        const id = ev.currentTarget.dataset.id;
+        addProductToCartById(id);
+        searchBar.classList.add('hidden');
+      }));
+    });
+
+    /* -------------------------
+       Cart: UI and operations
+       ------------------------- */
+    function toggleCart() {
       const sidebar = document.getElementById('cart-sidebar');
       const overlay = document.getElementById('cart-overlay');
       const opened = !sidebar.classList.contains('translate-x-full');
-      if(opened){
+      if(opened) {
         sidebar.classList.add('translate-x-full');
         overlay.classList.add('hidden');
       } else {
@@ -300,6 +397,188 @@
         overlay.classList.remove('hidden');
       }
     }
+
+    // Add product to cart by product id
+    function addProductToCartById(id) {
+      const prod = getAllProducts().find(p => p.id == id);
+      if(!prod) return;
+      const existing = cart.find(i => i.id == prod.id);
+      if(existing) existing.qty += 1;
+      else cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, qty: 1 });
+      persistCart(); updateCartUI();
+      showToast('Produto adicionado ao carrinho ✅');
+    }
+
+    // Add event listeners to "Adicionar" buttons on cards
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const card = e.currentTarget.closest('.product-card');
+        const id = card.dataset.id;
+        addProductToCartById(id);
+      });
+    });
+
+    function persistCart() {
+      localStorage.setItem('modastyle_cart', JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+      const container = document.getElementById('cart-items');
+      const totalEl = document.getElementById('cart-total');
+      const countEl = document.getElementById('cart-count');
+
+      container.innerHTML = '';
+      if(cart.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">Seu carrinho está vazio</p>';
+      } else {
+        let total = 0;
+        cart.forEach((item, idx) => {
+          total += item.price * item.qty;
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-3';
+          row.innerHTML = `
+            <div class="flex items-center gap-3">
+              <img src="${item.img}" alt="${item.name}" class="w-12 h-12 object-cover rounded-md">
+              <div class="text-sm">
+                <div class="font-medium">${item.name}</div>
+                <div class="text-xs text-gray-500">R$ ${item.price.toFixed(2)}</div>
+              </div>
+            </div>
+            <div class="flex flex-col items-end">
+              <div class="font-semibold text-[color:var(--accent)]">R$ ${(item.price * item.qty).toFixed(2)}</div>
+              <div class="flex items-center gap-2 mt-2">
+                <button class="px-2 py-0.5 border change-qty" data-idx="${idx}" data-delta="-1">−</button>
+                <div class="px-2">${item.qty}</div>
+                <button class="px-2 py-0.5 border change-qty" data-idx="${idx}" data-delta="1">+</button>
+                <button class="ml-2 text-red-500 remove-item" data-idx="${idx}">✖</button>
+              </div>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+
+        // bind quantity change & remove buttons
+        container.querySelectorAll('.change-qty').forEach(b => {
+          b.addEventListener('click', (ev) => {
+            const idx = parseInt(ev.currentTarget.dataset.idx);
+            const delta = parseInt(ev.currentTarget.dataset.delta);
+            cart[idx].qty += delta;
+            if(cart[idx].qty <= 0) cart.splice(idx,1);
+            persistCart(); updateCartUI();
+          });
+        });
+        container.querySelectorAll('.remove-item').forEach(b => {
+          b.addEventListener('click', (ev) => {
+            const idx = parseInt(ev.currentTarget.dataset.idx);
+            cart.splice(idx,1);
+            persistCart(); updateCartUI();
+          });
+        });
+
+        totalEl.textContent = 'R$ ' + total.toFixed(2);
+        let qtySum = cart.reduce((a,b)=>a+b.qty, 0);
+        countEl.textContent = qtySum;
+      }
+    }
+
+    /* -------------------------
+       Wishlist (favorites)
+       ------------------------- */
+    function persistWishlist() {
+      localStorage.setItem('modastyle_wishlist', JSON.stringify(wishlist));
+    }
+    // Toggle wishlist buttons
+    document.querySelectorAll('.add-to-wishlist').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const card = e.currentTarget.closest('.product-card');
+        const id = card.dataset.id;
+        if(wishlist.includes(id)) {
+          wishlist = wishlist.filter(x => x !== id);
+          e.currentTarget.classList.remove('text-red-500');
+          showToast('Removido dos favoritos');
+        } else {
+          wishlist.push(id);
+          e.currentTarget.classList.add('text-red-500');
+          showToast('Adicionado aos favoritos ❤️');
+        }
+        persistWishlist();
+      });
+      // on load mark favorites visually
+      const parentCard = btn.closest('.product-card');
+      if(parentCard && wishlist.includes(parentCard.dataset.id)) btn.classList.add('text-red-500');
+    });
+
+    /* -------------------------
+       Initialize page state
+       ------------------------- */
+    function init() {
+      // restore cart UI
+      updateCartUI();
+
+      // If search input exists, populate suggestions initially hidden
+      if(searchInput) {
+        const products = getAllProducts();
+        // no need to show initially
+      }
+    }
+    init();
+
+    /* -------------------------
+       Checkout button (demo)
+       ------------------------- */
+    document.getElementById('checkout-btn').addEventListener('click', ()=> {
+      if(cart.length === 0) { showToast('Carrinho vazio'); return; }
+      // Just a demo: clear cart and show toast
+      cart = [];
+      persistCart();
+      updateCartUI();
+      showToast('Compra simulada — carrinho limpo ✅');
+    });
+
+    /* -------------------------
+       Accessibility: close overlays on ESC
+       ------------------------- */
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape') {
+        document.getElementById('cart-sidebar').classList.add('translate-x-full');
+        document.getElementById('cart-overlay').classList.add('hidden');
+        document.getElementById('search-bar').classList.add('hidden');
+        document.getElementById('dropdown-user').classList.add('hidden');
+      }
+    });
+
+    // close cart overlay on click
+    document.getElementById('cart-overlay').addEventListener('click', ()=> {
+      document.getElementById('cart-sidebar').classList.add('translate-x-full');
+      document.getElementById('cart-overlay').classList.add('hidden');
+    });
+
   </script>
 </body>
-</html>
+</htm>
+<section id="contato" class="py-12 bg-[color:var(--beige-200)] rounded-2xl px-6 max-w-3xl mx-auto">
+  <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Fale conosco</h2>
+  <p class="text-gray-700 mb-8 text-center">Preencha o formulário abaixo e entraremos em contato o mais rápido possível.</p>
+
+  <form id="contact-form" class="space-y-4">
+    <div class="flex flex-col sm:flex-row gap-4">
+      <input type="text" name="nome" placeholder="Nome completo" required
+        class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
+      <input type="email" name="email" placeholder="Email" required
+        class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
+    </div>
+
+    <input type="password" name="senha" placeholder="Senha (opcional)" 
+      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
+
+    <textarea name="mensagem" placeholder="Mensagem" rows="5" required
+      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]"></textarea>
+
+    <button type="submit" class="w-full bg-[color:var(--accent)] text-white py-3 rounded-full font-semibold hover:bg-[#ea6a09] transition">
+      Enviar Mensagem
+    </button>
+  </form>
+
+  <p id="contact-msg" class="mt-4 text-center font-medium"></p>
+</section>
+
