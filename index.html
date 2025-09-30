@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -40,56 +39,56 @@
   <!-- Top container -->
   <div class="min-h-screen flex items-start justify-center py-12 px-6">
     <div class="w-full max-w-7xl site-frame">
+<!-- Header / Topo -->
+<header class="flex items-center justify-between mb-10 px-6 lg:px-0">
+  <!-- Logo -->
+  <div class="flex items-center gap-4">
+    <div class="w-10 h-10 bg-[color:var(--accent)] rounded-md flex items-center justify-center text-white font-bold">M</div>
+    <div class="text-lg font-semibold">ModaStyle</div>
+  </div>
 
-      <!-- NAV / Header -->
-      <header class="flex items-center justify-between mb-10">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 bg-[color:var(--accent)] rounded-md flex items-center justify-center text-white font-bold">M</div>
-          <div class="text-lg font-semibold">ModaStyle</div>
-        </div>
+  <!-- Menu de navegação -->
+  <nav class="hidden lg:flex items-center gap-8 text-sm text-[color:var(--muted)]">
+    <a href="#" class="hover:text-gray-900 transition">Início</a>
+    <a href="#" class="hover:text-gray-900 transition">Coleções</a>
+    <a href="#" class="hover:text-gray-900 transition">Novidades</a>
+    <a href="#" class="hover:text-gray-900 transition">Contato</a>
+  </nav>
 
-        <nav class="hidden lg:flex items-center gap-8 text-sm text-[color:var(--muted)]">
-          <a href="#" class="hover:text-gray-900 transition">Início</a>
-          <a href="#" class="hover:text-gray-900 transition">Coleções</a>
-          <a href="#" class="hover:text-gray-900 transition">Novidades</a>
-          <a href="#" class="hover:text-gray-900 transition">Contato</a>
-        </nav>
+  <!-- Ícones interativos -->
+  <div class="flex items-center gap-4">
+    <!-- Search toggle -->
+    <button id="btn-search" aria-label="Buscar" class="p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Buscar">
+      <i class="fas fa-search text-gray-700 hover:text-[color:var(--accent)] text-lg"></i>
+    </button>
 
-        <div class="flex items-center gap-4">
-          <!-- Search toggle -->
-          <button id="btn-search" aria-label="buscar" class="p-2 rounded-md hover:bg-white/60 transition">
-            <img src="https://img.icons8.com/ios/24/000000/search--v1.png" alt="buscar">
-          </button>
-
-          <!-- User dropdown -->
-          <div class="relative">
-            <button id="btn-user" aria-label="usuario" class="p-2 rounded-md hover:bg-white/60 transition">
-              <img src="https://img.icons8.com/ios/24/000000/user--v1.png" alt="user">
-            </button>
-            <div id="dropdown-user" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg py-2 z-40">
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Entrar / Criar conta</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meus pedidos</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
-            </div>
-          </div>
-
-          <!-- Cart button -->
-          <button id="btn-cart" aria-label="carrinho" class="relative p-2 rounded-md hover:bg-white/60 transition" onclick="toggleCart()">
-            <img src="https://img.icons8.com/ios/24/000000/shopping-cart--v1.png" alt="cart">
-            <span id="cart-count" class="absolute -top-1 -right-1 bg-[color:var(--accent)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-          </button>
-
-          <!-- Dark mode -->
-          <button id="btn-dark" class="p-2 rounded-md hover:bg-white/60 transition" title="Toggle dark mode">🌙</button>
-        </div>
-      </header>
-
-      <!-- Search bar overlay (hidden by default) -->
-      <div id="search-bar" class="hidden mb-6">
-        <input id="search-input" type="text" placeholder="Buscar produtos..." class="w-full p-3 border rounded-lg shadow-sm">
-        <div id="search-suggestions" class="mt-2"></div>
+    <!-- User dropdown -->
+    <div class="relative">
+      <button id="btn-user" aria-label="Usuário" class="p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Minha conta">
+        <i class="fas fa-user text-gray-700 hover:text-[color:var(--accent)] text-lg"></i>
+      </button>
+      <div id="dropdown-user" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg py-2 z-40">
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Entrar / Criar conta</a>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meus pedidos</a>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
       </div>
+    </div>
 
+    <!-- Cart button -->
+    <button id="btn-cart" aria-label="Carrinho" class="relative p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Carrinho" onclick="toggleCart()">
+      <i class="fas fa-shopping-cart text-gray-700 hover:text-[color:var(--accent)] text-lg"></i>
+      <span id="cart-count" class="absolute -top-1 -right-1 bg-[color:var(--accent)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+    </button>
+
+    <!-- Dark mode toggle -->
+    <button id="btn-dark" class="p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Modo escuro">🌙</button>
+
+    <!-- Chat flutuante (WhatsApp) -->
+    <a href="https://wa.me/5511999999999" target="_blank" class="fixed right-6 bottom-6 bg-[color:var(--accent)] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 tooltip" data-tooltip="Fale conosco">
+      <i class="fab fa-whatsapp text-white text-lg"></i>
+    </a>
+  </div>
+</header>
       <!-- HERO GRID (left: content; right: image + phone mockup) -->
       <section class="hero-bg p-10 rounded-2xl card-smooth mb-12">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -253,31 +252,54 @@
 
         </div>
       </section>
+<footer class="bg-white py-10 border-t border-gray-200 mt-16">
+  <div class="container mx-auto text-center">
 
-      <!-- Ícones das redes sociais -->
-<div class="flex items-center gap-4 text-sm text-gray-600">
-  <a href="https://instagram.com/seuusuario" target="_blank" rel="noopener" aria-label="Instagram">
-    <img src="img/instagram.png" alt="Instagram" class="w-5 h-5">
-  </a>
-  <a href="https://facebook.com/seuusuario" target="_blank" rel="noopener" aria-label="Facebook">
-    <img src="img/facebook.png" alt="Facebook" class="w-5 h-5">
-  </a>
-  <a href="https://tiktok.com/@seuusuario" target="_blank" rel="noopener" aria-label="TikTok">
-    <img src="img/tiktok.png" alt="TikTok" class="w-5 h-5">
-  </a>
-  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" aria-label="WhatsApp">
-    <img src="img/whatsapp.png" alt="WhatsApp" class="w-5 h-5">
-  </a>
-</div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ModaStyle — Loja</title>
 
-<!-- Links de contato como texto -->
-<div class="flex items-center gap-4 text-sm text-gray-600 mt-2">
-  <a href="https://instagram.com/seuusuario" target="_blank" rel="noopener">Instagram</a>
-  <a href="https://facebook.com/seuusuario" target="_blank" rel="noopener">Facebook</a>
-  <a href="https://tiktok.com/@seuusuario" target="_blank" rel="noopener">TikTok</a>
-  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener">WhatsApp</a>
-  <a href="mailto:contato@modastyle.com">contato@modastyle.com</a>
-</div>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome CDN (ícones) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+  <footer class="bg-white py-8">
+  <div class="max-w-6xl mx-auto px-4 text-center">
+    <h2 class="text-xl font-bold text-orange-600">ModaStyle</h2>
+    <p class="text-gray-600 mb-4">Sua loja de moda online</p>
+
+    <!-- Redes sociais -->
+    <div class="flex justify-center space-x-6 mb-4">
+      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
+        <i class="fab fa-instagram text-orange-500 text-2xl"></i>
+        <span>Instagram</span>
+      </a>
+      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
+        <i class="fab fa-facebook text-orange-500 text-2xl"></i>
+        <span>Facebook</span>
+      </a>
+      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
+        <i class="fab fa-tiktok text-orange-500 text-2xl"></i>
+        <span>TikTok</span>
+      </a>
+      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
+        <i class="fab fa-whatsapp text-orange-500 text-2xl"></i>
+        <span>WhatsApp</span>
+      </a>
+      <a href="mailto:contato@modastyle.com" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
+        <i class="fas fa-envelope text-orange-500 text-2xl"></i>
+        <span>contato@modastyle.com</span>
+      </a>
+    </div>
+
+    <!-- Direitos autorais -->
+    <p class="text-gray-500 text-sm">© 2025 ModaStyle. Todos os direitos reservados.</p>
+  </div>
+</footer>
 
   <!-- Cart sidebar -->
   <aside id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">

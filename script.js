@@ -1,37 +1,63 @@
-/* -------------------------
-   Toast notifications
-------------------------- */
-const toastEl = document.getElementById('toast');
-function showToast(msg = 'Feito') {
-  toastEl.textContent = msg;
-  toastEl.style.display = 'block';
-  setTimeout(() => toastEl.style.display = 'none', 1800);
-}
+document.addEventListener('DOMContentLoaded', () => {
 
-/* -------------------------
-   Cart & Wishlist state
-------------------------- */
-let cart = JSON.parse(localStorage.getItem('modastyle_cart') || '[]');
-let wishlist = JSON.parse(localStorage.getItem('modastyle_wishlist') || '[]');
-
-/* -------------------------
-   Dark mode
-------------------------- */
-const btnDark = document.getElementById('btn-dark');
-btnDark.addEventListener('click', () => {
-  document.documentElement.classList.toggle('dark');
-});
-
-/* -------------------------
-   User dropdown
-------------------------- */
-document.getElementById('btn-user').addEventListener('click', () => {
-  document.getElementById('dropdown-user').classList.toggle('hidden');
-});
-window.addEventListener('click', e => {
-  if (!e.target.closest('#btn-user') && !e.target.closest('#dropdown-user')) {
-    document.getElementById('dropdown-user').classList.add('hidden');
+  /* -------------------------
+     Toast notification
+  ------------------------- */
+  const toastEl = document.getElementById('toast');
+  function showToast(msg = 'Feito') {
+    toastEl.textContent = msg;
+    toastEl.style.display = 'block';
+    setTimeout(() => toastEl.style.display = 'none', 1800);
   }
+
+  /* -------------------------
+     Cart state
+  ------------------------- */
+  let cart = JSON.parse(localStorage.getItem('modastyle_cart') || '[]');
+
+  /* -------------------------
+     Dark mode toggle
+  ------------------------- */
+  const btnDark = document.getElementById('btn-dark');
+  btnDark.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
+
+  /* -------------------------
+     User dropdown
+  ------------------------- */
+  const btnUser = document.getElementById('btn-user');
+  const dropdownUser = document.getElementById('dropdown-user');
+
+  btnUser.addEventListener('click', () => dropdownUser.classList.toggle('hidden'));
+
+  window.addEventListener('click', (e) => {
+    if (!e.target.closest('#btn-user') && !e.target.closest('#dropdown-user')) {
+      dropdownUser.classList.add('hidden');
+    }
+  });
+
+  /* -------------------------
+     Cart toggle (sidebar)
+  ------------------------- */
+  const btnCart = document.getElementById('btn-cart');
+  const sidebar = document.getElementById('cart-sidebar');
+  const overlay = document.getElementById('cart-overlay');
+
+  btnCart.addEventListener('click', toggleCart);
+  overlay.addEventListener('click', toggleCart);
+
+  function toggleCart() {
+    const opened = !sidebar.classList.contains('translate-x-full');
+    if(opened) {
+      sidebar.classList.add('translate-x-full');
+      overlay.classList.add('hidden');
+    } else {
+      sidebar.classList.remove('translate-x-full');
+      overlay.classList.remove('hidden');
+    }
+  }
+
 });
 
 /* -------------------------
