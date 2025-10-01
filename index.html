@@ -1,606 +1,1306 @@
+Observação: troquei calça*.jpg → calca*.jpg nos src.
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ModaStyle — Loja</title>
-  <meta name="description" content="ModaStyle — Coleções contemporâneas.">
-
-  <!-- Tailwind CDN -->
+  <title>FASHIO - Premium Fashion Store</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { darkMode: 'class' }</script>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    :root{
-      --beige-100: #fbf2ec;
-      --beige-200: #f6e8df;
-      --accent: #f97316;
-      --muted: #8b7a6a;
-    }
-    .hero-bg { background: linear-gradient(180deg, rgba(250,244,241,1) 0%, rgba(252,247,244,1) 50%, rgba(255,255,255,1) 100%); }
-    .card-smooth{ border-radius: 18px; box-shadow: 0 8px 30px rgba(20,18,16,0.06); }
-    .site-frame{ background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(252,247,244,1) 100%); border-radius: 14px; padding: 28px; box-shadow: 0 16px 50px rgba(20,18,16,0.06); }
-    .phone-mock { border-radius: 36px; box-shadow: 0 24px 60px rgba(10,10,10,0.12); }
-    .display-serif{ font-family: "Playfair Display", serif; letter-spacing: -0.02em; }
-    .badge-soft { background: white; border-radius: 12px; padding: 10px 14px; box-shadow: 0 8px 24px rgba(20,18,16,0.06); }
-    .hero-image-frame{ border-radius: 22px; overflow: hidden; background: linear-gradient(180deg, rgba(255,249,244,1), rgba(250,244,241,1)); box-shadow: 0 12px 40px rgba(20,18,16,0.06); }
-    .toast { position: fixed; right: 20px; bottom: 20px; background: var(--accent); color: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); display:none; z-index: 60; }
-    @media (max-width:640px){ .display-serif { font-size: 2rem !important; line-height: 1.05 !important; } }
+    body { box-sizing: border-box; }
+    .hero-gradient { background: linear-gradient(135deg,#faf9f7 0%,#fff 100%); }
+    .product-card{ transition: all .3s ease; background:#fff }
+    .product-card:hover{ transform: translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,.08) }
+    .fade-in{ opacity:0; transform:translateY(40px); transition:opacity .8s, transform .8s }
+    .fade-in.visible{ opacity:1; transform:translateY(0) }
+    .btn-primary{ background:linear-gradient(135deg,#f97316 0%,#ea580c 100%) }
+    .btn-secondary{ border:2px solid #e5e7eb }
+    .highlight-card{ transition: all .3s }
+    .highlight-card:hover{ transform: scale(1.02) }
   </style>
 </head>
-<body class="bg-[color:var(--beige-100)] antialiased text-gray-800">
+<body class="bg-stone-50">
 
-  <!-- Toast -->
-  <div id="toast" class="toast">Produto adicionado ✅</div>
 
-  <!-- Top container -->
-  <div class="min-h-screen flex items-start justify-center py-12 px-6">
-    <div class="w-full max-w-7xl site-frame">
-<!-- Header / Topo -->
-<header class="flex items-center justify-between mb-10 px-6 lg:px-0">
-  <!-- Logo -->
-  <div class="flex items-center gap-4">
-    <div class="w-10 h-10 bg-[color:var(--accent)] rounded-md flex items-center justify-center text-white font-bold">M</div>
-    <div class="text-lg font-semibold">ModaStyle</div>
-  </div>
+  <header class="bg-white/95 sticky top-0 z-50 border-b border-stone-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <div><h1 class="text-3xl font-bold">FASHIO</h1></div>
+        <nav class="hidden md:flex space-x-10">
+          <a href="#">About</a><a href="#">Collections</a><a href="#">Services</a><a href="#">Colors</a>
+        </nav>
+        <div class="flex items-center space-x-6">
+          <button><i class="fas fa-search"></i></button>
+          <button id="loginBtn"><i class="fas fa-user"></i></button>
+          <div class="relative">
+            <button id="cartBtn"><i class="fas fa-shopping-bag"></i></button>
+            <span id="cartBadge" class="absolute -top-1 -right-1 bg-orange-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-  <!-- Menu de navegação -->
-  <nav class="hidden lg:flex items-center gap-8 text-sm text-[color:var(--muted)]">
-    <a href="#" class="hover:text-gray-900 transition">Início</a>
-    <a href="#" class="hover:text-gray-900 transition">Coleções</a>
-    <a href="#" class="hover:text-gray-900 transition">Novidades</a>
-    <a href="#" class="hover:text-gray-900 transition">Contato</a>
-  </nav>
 
-  <!-- Ícones interativos -->
-  <div class="flex items-center gap-4">
-    <!-- Search toggle -->
-    <button id="btn-search" aria-label="Buscar" class="p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Buscar">
-      <i class="fas fa-search text-gray-700 hover:text-[color:var(--accent)] text-lg"></i>
-    </button>
+  <section class="relative min-h-screen flex items-center hero-gradient">
+    <div class="absolute inset-0">
+      <img src="img/modelo1.jpg" alt="Modelo" class="w-full h-full object-cover opacity-70">
+    </div>
 
-    <!-- User dropdown -->
-    <div class="relative">
-      <button id="btn-user" aria-label="Usuário" class="p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Minha conta">
-        <i class="fas fa-user text-gray-700 hover:text-[color:var(--accent)] text-lg"></i>
-      </button>
-      <div id="dropdown-user" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg py-2 z-40">
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Entrar / Criar conta</a>
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Meus pedidos</a>
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</a>
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="space-y-10 lg:pr-8 bg-white/70 p-8 rounded-2xl shadow-lg">
+          <h1 class="text-6xl font-bold">Fashion<br><span class="text-orange-500">Forward</span></h1>
+          <p class="text-xl text-stone-600 max-w-lg">Descubra os últimos lançamentos com nossa coleção premium de roupas e acessórios.</p>
+          <div class="flex flex-col sm:flex-row gap-6">
+            <button class="btn-primary text-white px-10 py-5 rounded-full font-semibold">Comprar Agora</button>
+            <button class="btn-secondary text-stone-700 px-10 py-5 rounded-full font-semibold bg-white">Ver Coleção</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Cart button -->
-    <button id="btn-cart" aria-label="Carrinho" class="relative p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Carrinho" onclick="toggleCart()">
-      <i class="fas fa-shopping-cart text-gray-700 hover:text-[color:var(--accent)] text-lg"></i>
-      <span id="cart-count" class="absolute -top-1 -right-1 bg-[color:var(--accent)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-    </button>
+  
+    <div class="absolute top-10 right-10 w-16 h-16 bg-orange-200 rounded-full opacity-60 animate-pulse"></div>
+    <div class="absolute bottom-20 left-10 w-12 h-12 bg-stone-200 rounded-full opacity-40 animate-pulse"></div>
+  </section>
 
-    <!-- Dark mode toggle -->
-    <button id="btn-dark" class="p-2 rounded-md hover:bg-white/60 transition tooltip" data-tooltip="Modo escuro">🌙</button>
+  <section class="py-24 fade-in">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="highlight-card bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl p-10 text-white">
+          <h3 class="text-3xl font-bold mb-3">Summer Collection</h3>
+          <p class="mb-6">Up to 50% off on selected items</p>
+          <div class="flex items-baseline gap-2"><span class="text-sm">Starting from</span><span class="text-4xl font-bold">$89</span></div>
+        </div>
+        <div class="highlight-card bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl p-10 text-white">
+          <h3 class="text-3xl font-bold mb-3">Premium Footwear</h3>
+          <p class="mb-6">New arrivals in luxury shoes</p>
+          <div class="flex items-baseline gap-2"><span class="text-sm">Starting from</span><span class="text-4xl font-bold">$259</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Chat flutuante (WhatsApp) -->
-    <a href="https://wa.me/5511999999999" target="_blank" class="fixed right-6 bottom-6 bg-[color:var(--accent)] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 tooltip" data-tooltip="Fale conosco">
-      <i class="fab fa-whatsapp text-white text-lg"></i>
-    </a>
-  </div>
-</header>
-      <!-- HERO GRID (left: content; right: image + phone mockup) -->
-      <section class="hero-bg p-10 rounded-2xl card-smooth mb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <!-- LEFT: headline + subtitle + actions -->
-          <div class="max-w-xl">
-            <div class="text-sm font-medium uppercase text-[color:var(--accent)] mb-4">New arrivals</div>
-            <h1 class="display-serif text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-              Elegância contemporânea,<br>
-              feita para <span class="text-[color:var(--accent)]">você</span>.
-            </h1>
-            <p class="text-lg text-gray-600 mb-8">
-              Coleção primavera-outono com peças em tons terrosos, caimento perfeito e acabamento premium. Descubra looks atemporais que valorizam cada momento.
-            </p>
 
-            <div class="flex flex-col sm:flex-row gap-4">
-              <a class="inline-flex items-center gap-3 bg-[color:var(--accent)] hover:bg-[#ea6a09] text-white px-6 py-3 rounded-full font-semibold shadow-sm transition" href="#">
-                Comprar agora
-              </a>
-              <a class="inline-flex items-center gap-3 border border-gray-200 bg-white px-6 py-3 rounded-full font-semibold text-gray-800 hover:shadow transition" href="#">
-                Ver catálogo
-              </a>
+  <section class="py-24 bg-white fade-in">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-5xl font-bold text-stone-900 mb-6">Produtos em Destaque</h2>
+        <p class="text-xl text-stone-600 max-w-2xl mx-auto">Confira nossa seleção exclusiva de peças modernas</p>
+      </div>
+
+      <div id="productsGrid" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+      
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/blusa1.jpg" alt="Blusa 1" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Blusa 1</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 79,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/blusa2.jpg" alt="Blusa 2" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Blusa 2</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 89,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/blusa3.png" alt="Blusa 3" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Blusa 3</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 69,90</p>
+        </div>
+
+        
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/calça1.jpg" alt="Calça 1" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Calça 1</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 119,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/calça2.jpg" alt="Calça 2" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Calça 2</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 129,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/calça3.jpg" alt="Calça 3" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Calça 3</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 139,90</p>
+        </div>
+
+      
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/saia1.jpg" alt="Saia 1" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Saia 1</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 89,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/saia2.jpg" alt="Saia 2" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Saia 2</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 99,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/saia3.jpg" alt="Saia 3" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Saia 3</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 109,90</p>
+        </div>
+
+        
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/vestido1.jpg" alt="Vestido 1" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Vestido 1</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 149,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/vestido2.jpg" alt="Vestido 2" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Vestido 2</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 159,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/vestido3.jpg" alt="Vestido 3" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Vestido 3</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 169,90</p>
+        </div>
+
+      
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/tenis1.jpg" alt="Tênis 1" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Tênis 1</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 199,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/tenis2.jpg" alt="Tênis 2" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Tênis 2</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 219,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/tenis3.jpg" alt="Tênis 3" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Tênis 3</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 229,90</p>
+        </div>
+
+        
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/colar.jpg" alt="Colar" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Colar</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 59,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/pulseira.jpg" alt="Pulseira" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Pulseira</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 49,90</p>
+        </div>
+        <div class="product-card p-6 rounded-2xl shadow-lg text-center">
+          <img src="img/brinco.jpg" alt="Brinco" class="w-full h-64 object-cover rounded-xl mb-4">
+          <h3 class="text-xl font-semibold">Brinco</h3>
+          <p class="text-green-600 font-bold text-lg">R$ 39,90</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+            <div class="text-center mt-16">
+                <button class="btn-secondary text-stone-700 px-12 py-4 rounded-full font-semibold text-lg bg-white border-2 border-stone-200">
+                    View All Products
+                </button>
             </div>
-          </div>
+        </div>
+    </section>
 
-          <!-- RIGHT: framed image + phone mockup overlay -->
-          <div class="relative flex justify-center lg:justify-end">
-            <div class="hero-image-frame w-80 h-96">
-              <img src="img/modelo1.jpg" alt="Modelo de blusa marrom" class="w-full h-full object-cover">
+
+    <section class="py-24 bg-stone-50 fade-in">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-stone-900 mb-6">Shop on the Go</h2>
+                <p class="text-xl text-stone-600 max-w-2xl mx-auto">Experience seamless shopping with our mobile-optimized platform. Fast, secure, and always available.</p>
             </div>
-
-            <div class="absolute -left-8 -bottom-6 badge-soft">
-              <div class="text-xs text-[color:var(--muted)]">Destaque</div>
-              <div class="font-semibold text-gray-900">Nova Coleção • Outono 2025</div>
+            
+            <div class="grid lg:grid-cols-3 gap-12 items-center">
+              
+                <div class="space-y-8">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-mobile-alt text-orange-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-stone-900 mb-2">Mobile Optimized</h3>
+                            <p class="text-stone-600">Perfect shopping experience on any device</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-shipping-fast text-emerald-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-stone-900 mb-2">Fast Checkout</h3>
+                            <p class="text-stone-600">Complete your purchase in just a few taps</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-shield-alt text-blue-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-stone-900 mb-2">Secure Payment</h3>
+                            <p class="text-stone-600">Your transactions are always protected</p>
+                        </div>
+                    </div>
+                </div>
+                
+              
+                <div class="flex justify-center">
+                    <div class="relative">
+                        <div class="w-72 h-[600px] bg-gradient-to-br from-stone-800 to-stone-900 rounded-[3rem] p-2 shadow-2xl">
+                            <div class="bg-white rounded-[2.5rem] h-full p-6 overflow-hidden">
+                                
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-bold text-stone-900 text-lg">FASHIO</h3>
+                                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-sm font-bold">3</span>
+                                    </div>
+                                </div>
+                                
+                              
+                                <div class="bg-stone-50 rounded-2xl p-4 mb-6">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="w-16 h-16 bg-stone-200 rounded-xl flex items-center justify-center">
+                                            <i class="fas fa-tshirt text-stone-500 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-stone-900">Premium Tee</p>
+                                            <p class="text-stone-600 text-sm">Size: M</p>
+                                            <p class="font-bold text-orange-500">$79</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                              
+                                <div class="grid grid-cols-2 gap-3 mb-6">
+                                    <button class="bg-orange-500 text-white py-3 rounded-xl font-semibold">
+                                        Buy Now
+                                    </button>
+                                    <button class="border-2 border-stone-200 text-stone-700 py-3 rounded-xl font-semibold">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                                
+                              
+                                <div class="flex justify-around pt-4 border-t border-stone-200">
+                                    <i class="fas fa-home text-orange-500 text-xl"></i>
+                                    <i class="fas fa-search text-stone-400 text-xl"></i>
+                                    <i class="fas fa-heart text-stone-400 text-xl"></i>
+                                    <i class="fas fa-user text-stone-400 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+          
+                <div class="space-y-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-stone-900 mb-2">98%</div>
+                        <div class="text-stone-600">Customer Satisfaction</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-stone-900 mb-2">24/7</div>
+                        <div class="text-stone-600">Customer Support</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-stone-900 mb-2">Free</div>
+                        <div class="text-stone-600">Shipping Worldwide</div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <!-- phone mockup (visual only) -->
-            <div class="absolute -right-6 -bottom-12 phone-mock bg-white rounded-3xl w-56 h-96 overflow-hidden flex flex-col">
-              <div class="flex items-center justify-between px-3 py-2 border-b text-sm text-gray-600">
-                <div class="w-6 h-2 rounded bg-gray-200"></div>
-                <div>3:24</div>
-                <div class="w-6 h-2 rounded bg-gray-200"></div>
-              </div>
 
-              <div class="p-3 flex-1 overflow-auto">
-                <div class="text-sm font-semibold mb-2">Seu carrinho</div>
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="grid md:grid-cols-2 gap-8 p-8">
+      
+                <div class="space-y-4">
+                    <div class="bg-stone-100 rounded-2xl h-96 flex items-center justify-center">
+                        <i id="modalProductIcon" class="fas fa-tshirt text-8xl text-stone-400"></i>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div class="bg-stone-100 rounded-lg h-20 flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-tshirt text-stone-400"></i>
+                        </div>
+                        <div class="bg-stone-100 rounded-lg h-20 flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-tshirt text-stone-400"></i>
+                        </div>
+                        <div class="bg-stone-100 rounded-lg h-20 flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-tshirt text-stone-400"></i>
+                        </div>
+                        <div class="bg-stone-100 rounded-lg h-20 flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-tshirt text-stone-400"></i>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="space-y-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 id="modalProductName" class="text-3xl font-bold text-stone-900 mb-2">Premium Cotton Tee</h2>
+                            <p class="text-stone-600">SKU: #PT001</p>
+                        </div>
+                        <button id="closeProductModal" class="text-stone-400 hover:text-stone-600 p-2">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <div id="modalProductPrice" class="text-3xl font-bold text-orange-500">$79</div>
+                        <div class="flex items-center gap-1">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="text-stone-600 text-sm">(127 reviews)</span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-stone-700 leading-relaxed">
+                        Premium quality cotton t-shirt with superior comfort and durability. Perfect for casual wear with a modern fit that complements any style.
+                    </p>
+              
+
+                    <div>
+                        <h3 class="font-semibold text-stone-900 mb-3">Size</h3>
+                        <div class="flex gap-2">
+                            <button class="size-btn w-12 h-12 border-2 border-stone-200 rounded-lg font-semibold hover:border-orange-500 transition-colors">XS</button>
+                            <button class="size-btn w-12 h-12 border-2 border-stone-200 rounded-lg font-semibold hover:border-orange-500 transition-colors">S</button>
+                            <button class="size-btn w-12 h-12 border-2 border-orange-500 bg-orange-50 rounded-lg font-semibold">M</button>
+                            <button class="size-btn w-12 h-12 border-2 border-stone-200 rounded-lg font-semibold hover:border-orange-500 transition-colors">L</button>
+                            <button class="size-btn w-12 h-12 border-2 border-stone-200 rounded-lg font-semibold hover:border-orange-500 transition-colors">XL</button>
+                        </div>
+                        <a href="#" class="text-orange-500 text-sm hover:underline mt-2 inline-block">Size Guide</a>
+                    </div>
+                    
+                  
+                    <div>
+                        <h3 class="font-semibold text-stone-900 mb-3">Color</h3>
+                        <div class="flex gap-2">
+                            <button class="w-8 h-8 bg-stone-800 rounded-full border-2 border-stone-300"></button>
+                            <button class="w-8 h-8 bg-white rounded-full border-2 border-orange-500"></button>
+                            <button class="w-8 h-8 bg-blue-600 rounded-full border-2 border-stone-300"></button>
+                            <button class="w-8 h-8 bg-emerald-600 rounded-full border-2 border-stone-300"></button>
+                        </div>
+                    </div>
+                    
+                  
+                    <div>
+                        <h3 class="font-semibold text-stone-900 mb-3">Quantity</h3>
+                        <div class="flex items-center gap-3">
+                            <button id="decreaseQty" class="w-10 h-10 border border-stone-300 rounded-lg flex items-center justify-center hover:bg-stone-50">
+                                <i class="fas fa-minus text-sm"></i>
+                            </button>
+                            <span id="quantity" class="w-12 text-center font-semibold">1</span>
+                            <button id="increaseQty" class="w-10 h-10 border border-stone-300 rounded-lg flex items-center justify-center hover:bg-stone-50">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                
+                    <div class="flex gap-4">
+                        <button id="modalAddToCart" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-full font-semibold transition-colors">
+                            Add to Cart
+                        </button>
+                        <button class="w-14 h-14 border-2 border-stone-300 rounded-full flex items-center justify-center hover:border-red-500 hover:text-red-500 transition-colors">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                  
+                    <div class="bg-stone-50 rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-shipping-fast text-emerald-500"></i>
+                            <span class="font-semibold">Free Shipping</span>
+                        </div>
+                        <p class="text-sm text-stone-600">Free shipping on orders over $100. Delivery in 3-5 business days.</p>
+                    </div>
+                </div>
+            </div>
+            
+          
+            <div class="border-t border-stone-200 p-8">
+                <h3 class="text-2xl font-bold text-stone-900 mb-6">Customer Reviews</h3>
+                <div class="space-y-4">
+                    <div class="border border-stone-200 rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                S
+                            </div>
+                            <div>
+                                <p class="font-semibold">Sarah M.</p>
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-stone-700">"Amazing quality and perfect fit! The fabric is so soft and comfortable. Definitely buying more colors."</p>
+                    </div>
+                    
+                    <div class="border border-stone-200 rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                M
+                            </div>
+                            <div>
+                                <p class="font-semibold">Mike R.</p>
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-stone-700">"Great t-shirt, true to size. Fast delivery and excellent customer service."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="accountModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-stone-900">My Account</h2>
+                <button id="closeAccountModal" class="text-stone-400 hover:text-stone-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+          
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="your@email.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition-colors">
+                    Sign In
+                </button>
+                
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-stone-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-stone-500">Or continue with</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" class="social-login-btn flex items-center justify-center gap-2 px-4 py-3 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors">
+                        <i class="fab fa-google text-red-500"></i>
+                        <span class="font-medium text-stone-700">Google</span>
+                    </button>
+                    <button type="button" class="social-login-btn flex items-center justify-center gap-2 px-4 py-3 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors">
+                        <i class="fab fa-facebook text-blue-600"></i>
+                        <span class="font-medium text-stone-700">Facebook</span>
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <button type="button" id="showRegister" class="text-orange-500 hover:text-orange-600 font-medium">
+                        Don't have an account? Sign up
+                    </button>
+                </div>
+            </form>
+            
+          
+            <form id="registerForm" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Full Name</label>
+                    <input type="text" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Your name">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="your@email.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition-colors">
+                    Create Account
+                </button>
+                
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-stone-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-stone-500">Or sign up with</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" class="social-login-btn flex items-center justify-center gap-2 px-4 py-3 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors">
+                        <i class="fab fa-google text-red-500"></i>
+                        <span class="font-medium text-stone-700">Google</span>
+                    </button>
+                    <button type="button" class="social-login-btn flex items-center justify-center gap-2 px-4 py-3 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors">
+                        <i class="fab fa-facebook text-blue-600"></i>
+                        <span class="font-medium text-stone-700">Facebook</span>
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <button type="button" id="showLogin" class="text-orange-500 hover:text-orange-600 font-medium">
+                        Already have an account? Sign in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <div id="cartSidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 border-b border-stone-200">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-stone-900">Shopping Cart</h2>
+                <button id="closeCart" class="text-stone-400 hover:text-stone-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <p class="text-stone-600 mt-1">Free shipping on orders over $100</p>
+        </div>
+        
+        <div id="cartItems" class="flex-1 overflow-y-auto p-6">
+            
+        </div>
+        
+        <div class="border-t border-stone-200 p-6">
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-stone-600">Subtotal:</span>
+                    <span id="cartSubtotal" class="font-semibold">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-stone-600">Shipping:</span>
+                    <span class="text-emerald-600 font-semibold">Free</span>
+                </div>
+                <div class="border-t pt-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">Total:</span>
+                        <span id="cartTotal" class="text-2xl font-bold text-orange-500">$0.00</span>
+                    </div>
+                </div>
+                <button id="checkoutBtn" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-full font-semibold text-lg transition-colors">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+  
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-stone-900">Checkout</h2>
+                    <button id="closeCheckout" class="text-stone-400 hover:text-stone-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="checkoutForm" class="space-y-6">
+                    
+                    <div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-4">Shipping Information</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">First Name</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">Last Name</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-stone-700 mb-2">Email</label>
+                                <input type="email" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-stone-700 mb-2">Address</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">City</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">ZIP Code</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+                    
+                  
+                    <div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-4">Payment Method</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 p-4 border border-stone-300 rounded-lg cursor-pointer hover:bg-stone-50">
+                                <input type="radio" name="payment" value="card" class="text-orange-500" checked>
+                                <i class="fas fa-credit-card text-xl text-stone-600"></i>
+                                <span class="font-medium">Credit/Debit Card</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 border border-stone-300 rounded-lg cursor-pointer hover:bg-stone-50">
+                                <input type="radio" name="payment" value="paypal" class="text-orange-500">
+                                <i class="fab fa-paypal text-xl text-blue-600"></i>
+                                <span class="font-medium">PayPal</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 border border-stone-300 rounded-lg cursor-pointer hover:bg-stone-50">
+                                <input type="radio" name="payment" value="apple" class="text-orange-500">
+                                <i class="fab fa-apple text-xl text-stone-800"></i>
+                                <span class="font-medium">Apple Pay</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="bg-stone-50 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-stone-900 mb-4">Order Summary</h3>
+                        <div id="checkoutItems" class="space-y-3 mb-4">
+                            
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between items-center text-2xl font-bold">
+                                <span>Total:</span>
+                                <span id="checkoutTotal" class="text-orange-500">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-full font-semibold text-lg transition-colors">
+                        Complete Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="fixed bottom-6 right-6 z-40">
+        <a href="https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre os produtos da FASHIO." target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center gap-3">
+            <i class="fab fa-whatsapp text-2xl"></i>
+            <span class="hidden md:block font-semibold">Fale Conosco</span>
+        </a>
+    </div>
+
+    <div id="chatWidget" class="fixed bottom-6 left-6 z-40">
+        <div id="chatBubble" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition-all duration-300 hover:scale-110">
+            <i class="fas fa-comments text-xl"></i>
+        </div>
+        
+        <div id="chatWindow" class="absolute bottom-16 left-0 bg-white rounded-2xl shadow-2xl w-80 h-96 hidden border border-stone-200">
+            <div class="bg-blue-500 text-white p-4 rounded-t-2xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold">Atendimento FASHIO</h3>
+                    <button id="closeChatWindow" class="text-white hover:text-blue-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p class="text-blue-100 text-sm">Como podemos ajudar você?</p>
+            </div>
+            
+            <div class="p-4 h-64 overflow-y-auto" id="chatMessages">
                 <div class="space-y-3">
-                  <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-[color:var(--beige-200)] rounded-md flex items-center justify-center">👗</div>
-                      <div class="text-sm">
-                        <div class="font-medium">Vestido Floral</div>
-                        <div class="text-xs text-gray-500">P • Bege</div>
-                      </div>
+                    <div class="bg-stone-100 rounded-lg p-3 max-w-xs">
+                        <p class="text-sm">Olá! Sou a assistente virtual da FASHIO. Como posso ajudar?</p>
                     </div>
-                    <div class="font-semibold text-[color:var(--accent)]">R$ 149,90</div>
-                  </div>
-                  <div class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-pink-50 rounded-md flex items-center justify-center">👕</div>
-                      <div class="text-sm">
-                        <div class="font-medium">Camiseta Premium</div>
-                        <div class="text-xs text-gray-500">M • Algodão</div>
-                      </div>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <button class="quick-reply bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-xs hover:bg-blue-200 transition-colors">
+                            📦 Rastrear pedido
+                        </button>
+                        <button class="quick-reply bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-xs hover:bg-blue-200 transition-colors">
+                            📏 Guia de tamanhos
+                        </button>
+                        <button class="quick-reply bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-xs hover:bg-blue-200 transition-colors">
+                            🔄 Trocas e devoluções
+                        </button>
+                        <button class="quick-reply bg-blue-100 text-blue-700 px-3 py-2 rounded-full text-xs hover:bg-blue-200 transition-colors">
+                            💳 Formas de pagamento
+                        </button>
                     </div>
-                    <div class="font-semibold text-[color:var(--accent)]">R$ 89,90</div>
-                  </div>
                 </div>
-              </div>
-
-              <div class="p-3 border-t">
-                <div class="flex justify-between items-center mb-3">
-                  <div class="text-sm text-gray-600">Total</div>
-                  <div class="font-bold text-[color:var(--accent)]">R$ 239,80</div>
+            </div>
+            
+            <div class="p-4 border-t border-stone-200">
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Type your message..." class="flex-1 px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
-                <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full font-semibold">Finalizar compra</button>
-              </div>
             </div>
-
-          </div>
         </div>
-      </section>
-
-      <!-- Promo small cards below hero -->
-      <section class="mb-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-6 card-smooth bg-[#15494b] rounded-2xl text-white flex items-center justify-between">
-            <div>
-              <div class="text-xs uppercase opacity-70">Ofertas & Promo</div>
-              <div class="text-xl font-semibold mt-2">Até 50% OFF em peças selecionadas</div>
-            </div>
-            <div>
-              <button class="bg-white text-[#15494b] px-4 py-2 rounded-full font-semibold">Ver ofertas</button>
-            </div>
-          </div>
-
-          <div class="p-6 card-smooth bg-gradient-to-r from-[#2aa46b] to-[#2fa6e6] rounded-2xl text-white flex items-center justify-between">
-            <div>
-              <div class="text-xs uppercase opacity-70">Coleção</div>
-              <div class="text-xl font-semibold mt-2">Verão • Novidades</div>
-            </div>
-            <div>
-              <button class="bg-white text-[#2aa46b] px-4 py-2 rounded-full font-semibold">Descobrir</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Grid de produtos (com botões e data attributes para JS) -->
-      <section class="pb-12">
-        <h3 class="text-2xl font-semibold text-gray-900 mb-6">Produtos em Destaque</h3>
-
-        <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          <!-- Each card preserved visual; I added buttons and data attributes for JS -->
-          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="1" data-name="Vestido Longo" data-price="179.00" data-img="img/vestido1.jpg">
-            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/vestido1.jpg" alt="Vestido Longo" class="w-full h-full object-cover">
-            </div>
-            <div class="text-sm font-medium">Vestido Longo</div>
-            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 179,00</div>
-            <div class="mt-3 flex gap-2">
-              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
-              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="2" data-name="Saia Plissada" data-price="129.00" data-img="img/saia1.jpg">
-            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/saia1.jpg" alt="Saia Plissada" class="w-full h-full object-cover">
-            </div>
-            <div class="text-sm font-medium">Saia Plissada</div>
-            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 129,00</div>
-            <div class="mt-3 flex gap-2">
-              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
-              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="3" data-name="Tênis Casual" data-price="199.00" data-img="img/tenis1.jpg">
-            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/tenis1.jpg" alt="Tênis Casual" class="w-full h-full object-cover">
-            </div>
-            <div class="text-sm font-medium">Tênis Casual</div>
-            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 199,00</div>
-            <div class="mt-3 flex gap-2">
-              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
-              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-xl p-4 card-smooth product-card" data-id="4" data-name="Colar Dourado" data-price="69.00" data-img="img/colar.jpg">
-            <div class="w-full h-48 rounded-lg overflow-hidden mb-4 bg-gray-100">
-              <img src="img/colar.jpg" alt="Colar Dourado" class="w-full h-full object-cover">
-            </div>
-            <div class="text-sm font-medium">Colar Dourado</div>
-            <div class="mt-2 font-bold text-[color:var(--accent)]">R$ 69,00</div>
-            <div class="mt-3 flex gap-2">
-              <button class="w-full bg-[color:var(--accent)] text-white py-2 rounded-full add-to-cart">Adicionar</button>
-              <button class="p-2 rounded-md border add-to-wishlist" title="Favoritar">♡</button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-<footer class="bg-white py-10 border-t border-gray-200 mt-16">
-  <div class="container mx-auto text-center">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ModaStyle — Loja</title>
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font Awesome CDN (ícones) -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-</head>
-
-  <footer class="bg-white py-8">
-  <div class="max-w-6xl mx-auto px-4 text-center">
-    <h2 class="text-xl font-bold text-orange-600">ModaStyle</h2>
-    <p class="text-gray-600 mb-4">Sua loja de moda online</p>
-
-    <!-- Redes sociais -->
-    <div class="flex justify-center space-x-6 mb-4">
-      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
-        <i class="fab fa-instagram text-orange-500 text-2xl"></i>
-        <span>Instagram</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
-        <i class="fab fa-facebook text-orange-500 text-2xl"></i>
-        <span>Facebook</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
-        <i class="fab fa-tiktok text-orange-500 text-2xl"></i>
-        <span>TikTok</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
-        <i class="fab fa-whatsapp text-orange-500 text-2xl"></i>
-        <span>WhatsApp</span>
-      </a>
-      <a href="mailto:contato@modastyle.com" class="flex items-center space-x-2 text-gray-700 hover:text-orange-600">
-        <i class="fas fa-envelope text-orange-500 text-2xl"></i>
-        <span>contato@modastyle.com</span>
-      </a>
     </div>
 
-    <!-- Direitos autorais -->
-    <p class="text-gray-500 text-sm">© 2025 ModaStyle. Todos os direitos reservados.</p>
-  </div>
-</footer>
-
-  <!-- Cart sidebar -->
-  <aside id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
-    <div class="p-6 border-b">
-      <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-bold">Carrinho</h2>
-        <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">✖</button>
-      </div>
-    </div>
-
-    <div id="cart-items" class="flex-1 overflow-y-auto p-6">
-      <p class="text-gray-500 text-center">Seu carrinho está vazio</p>
-    </div>
-
-    <div class="p-6 border-t bg-gray-50">
-      <div class="flex justify-between items-center mb-4">
-        <span class="text-lg font-bold">Total:</span>
-        <span id="cart-total" class="text-2xl font-bold text-[color:var(--accent)]">R$ 0,00</span>
-      </div>
-      <div class="flex gap-2">
-        <button id="checkout-btn" class="w-full bg-[color:var(--accent)] text-white py-3 rounded-full font-semibold">Finalizar Compra</button>
-      </div>
-    </div>
-  </aside>
-  <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-40 hidden" onclick="toggleCart()"></div>
-
-  <!-- Chat floating (example) -->
-  <a href="https://wa.me/5511999999999" target="_blank" class="fixed right-6 bottom-6 bg-[color:var(--accent)] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50" title="Fale conosco">
-    💬
-  </a>
-
-  <script>
-    /* -------------------------
-       Utilities & state
-       ------------------------- */
-    const toastEl = document.getElementById('toast');
-    function showToast(msg='Feito') {
-      toastEl.textContent = msg;
-      toastEl.style.display = 'block';
-      setTimeout(()=> toastEl.style.display = 'none', 1800);
-    }
-
-    // Cart state persisted in localStorage
-    let cart = JSON.parse(localStorage.getItem('modastyle_cart')||'[]');
-    let wishlist = JSON.parse(localStorage.getItem('modastyle_wishlist')||'[]');
-
-    /* -------------------------
-       Dark mode
-       ------------------------- */
-    const btnDark = document.getElementById('btn-dark');
-    btnDark.addEventListener('click', ()=> {
-      document.documentElement.classList.toggle('dark');
-    });
-
-    /* -------------------------
-       User dropdown
-       ------------------------- */
-    document.getElementById('btn-user').addEventListener('click', ()=> {
-      document.getElementById('dropdown-user').classList.toggle('hidden');
-    });
-    // close user dropdown when clicking outside
-    window.addEventListener('click', (e)=> {
-      if (!e.target.closest('#btn-user') && !e.target.closest('#dropdown-user')) {
-        document.getElementById('dropdown-user').classList.add('hidden');
-      }
-    });
-
-    /* -------------------------
-       Search toggle & behavior
-       ------------------------- */
-    const btnSearch = document.getElementById('btn-search');
-    const searchBar = document.getElementById('search-bar');
-    const searchInput = document.getElementById('search-input');
-    const searchSuggestions = document.getElementById('search-suggestions');
-
-    btnSearch.addEventListener('click', ()=> searchBar.classList.toggle('hidden'));
-    // build product list for suggestions
-    function getAllProducts() {
-      return Array.from(document.querySelectorAll('.product-card')).map(card => ({
-        id: card.dataset.id,
-        name: card.dataset.name,
-        price: parseFloat(card.dataset.price),
-        img: card.dataset.img
-      }));
-    }
-    searchInput?.addEventListener('input', ()=> {
-      const q = (searchInput.value||'').toLowerCase().trim();
-      const matches = getAllProducts().filter(p => p.name.toLowerCase().includes(q));
-      searchSuggestions.innerHTML = matches.map(p => `
-        <div class="p-2 border rounded mb-2 flex items-center justify-between">
-          <div><strong>${p.name}</strong><div class="text-xs text-gray-500">R$ ${p.price.toFixed(2)}</div></div>
-          <div class="flex flex-col gap-1">
-            <button class="px-2 py-1 bg-[color:var(--accent)] text-white rounded-sm add-from-search" data-id="${p.id}">Adicionar</button>
-          </div>
+  
+    <footer class="bg-stone-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <h3 class="text-3xl font-bold mb-6">FASHIO</h3>
+                    <p class="text-stone-300 text-lg mb-6 max-w-md">Your destination for premium fashion and accessories. Crafting style that speaks to your individuality.</p>
+                    <div class="flex gap-6">
+                        <a href="https://facebook.com/fashio" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://instagram.com/fashio" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center hover:bg-pink-500 transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://tiktok.com/@fashio" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center hover:bg-black transition-colors">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center hover:bg-green-500 transition-colors">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-6 text-lg">Quick Links</h4>
+                    <ul class="space-y-4 text-stone-300">
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Collections</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="hover:text-orange-500 transition-colors">Returns</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-6 text-lg">Newsletter</h4>
+                    <p class="text-stone-300 mb-6">Stay updated with our latest collections and exclusive offers.</p>
+                    <form id="newsletterForm" class="space-y-4">
+                        <input type="email" required placeholder="Enter your email" class="w-full px-4 py-3 bg-stone-800 border border-stone-700 rounded-lg text-white placeholder-stone-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition-colors">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-stone-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-stone-400">&copy; 2024 FASHIO. All rights reserved.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="text-stone-400 hover:text-orange-500 transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-stone-400 hover:text-orange-500 transition-colors">Terms of Service</a>
+                    <a href="#" class="text-stone-400 hover:text-orange-500 transition-colors">Contact</a>
+                </div>
+            </div>
         </div>
-      `).join('');
-      // bind add-from-search buttons
-      document.querySelectorAll('.add-from-search').forEach(b=> b.addEventListener('click', (ev) => {
-        const id = ev.currentTarget.dataset.id;
-        addProductToCartById(id);
-        searchBar.classList.add('hidden');
-      }));
-    });
+    </footer>
 
-    /* -------------------------
-       Cart: UI and operations
-       ------------------------- */
-    function toggleCart() {
-      const sidebar = document.getElementById('cart-sidebar');
-      const overlay = document.getElementById('cart-overlay');
-      const opened = !sidebar.classList.contains('translate-x-full');
-      if(opened) {
-        sidebar.classList.add('translate-x-full');
-        overlay.classList.add('hidden');
-      } else {
-        sidebar.classList.remove('translate-x-full');
-        overlay.classList.remove('hidden');
-      }
-    }
 
-    // Add product to cart by product id
-    function addProductToCartById(id) {
-      const prod = getAllProducts().find(p => p.id == id);
-      if(!prod) return;
-      const existing = cart.find(i => i.id == prod.id);
-      if(existing) existing.qty += 1;
-      else cart.push({ id: prod.id, name: prod.name, price: prod.price, img: prod.img, qty: 1 });
-      persistCart(); updateCartUI();
-      showToast('Produto adicionado ao carrinho ✅');
-    }
+<script>
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-    // Add event listeners to "Adicionar" buttons on cards
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const card = e.currentTarget.closest('.product-card');
-        const id = card.dataset.id;
-        addProductToCartById(id);
-      });
-    });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-    function persistCart() {
-      localStorage.setItem('modastyle_cart', JSON.stringify(cart));
-    }
-
-    function updateCartUI() {
-      const container = document.getElementById('cart-items');
-      const totalEl = document.getElementById('cart-total');
-      const countEl = document.getElementById('cart-count');
-
-      container.innerHTML = '';
-      if(cart.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-center">Seu carrinho está vazio</p>';
-      } else {
-        let total = 0;
-        cart.forEach((item, idx) => {
-          total += item.price * item.qty;
-          const row = document.createElement('div');
-          row.className = 'flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-3';
-          row.innerHTML = `
-            <div class="flex items-center gap-3">
-              <img src="${item.img}" alt="${item.name}" class="w-12 h-12 object-cover rounded-md">
-              <div class="text-sm">
-                <div class="font-medium">${item.name}</div>
-                <div class="text-xs text-gray-500">R$ ${item.price.toFixed(2)}</div>
-              </div>
-            </div>
-            <div class="flex flex-col items-end">
-              <div class="font-semibold text-[color:var(--accent)]">R$ ${(item.price * item.qty).toFixed(2)}</div>
-              <div class="flex items-center gap-2 mt-2">
-                <button class="px-2 py-0.5 border change-qty" data-idx="${idx}" data-delta="-1">−</button>
-                <div class="px-2">${item.qty}</div>
-                <button class="px-2 py-0.5 border change-qty" data-idx="${idx}" data-delta="1">+</button>
-                <button class="ml-2 text-red-500 remove-item" data-idx="${idx}">✖</button>
-              </div>
-            </div>
-          `;
-          container.appendChild(row);
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
         });
 
-        // bind quantity change & remove buttons
-        container.querySelectorAll('.change-qty').forEach(b => {
-          b.addEventListener('click', (ev) => {
-            const idx = parseInt(ev.currentTarget.dataset.idx);
-            const delta = parseInt(ev.currentTarget.dataset.delta);
-            cart[idx].qty += delta;
-            if(cart[idx].qty <= 0) cart.splice(idx,1);
-            persistCart(); updateCartUI();
-          });
-        });
-        container.querySelectorAll('.remove-item').forEach(b => {
-          b.addEventListener('click', (ev) => {
-            const idx = parseInt(ev.currentTarget.dataset.idx);
-            cart.splice(idx,1);
-            persistCart(); updateCartUI();
-          });
+      
+        let cartCount = 0;
+        let cartItems = [];
+        let currentQuantity = 1;
+        const cartBadge = document.getElementById('cartBadge');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartTotal = document.getElementById('cartTotal');
+
+        
+        const productModal = document.getElementById('productModal');
+        const accountModal = document.getElementById('accountModal');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatBubble = document.getElementById('chatBubble');
+        const chatWindow = document.getElementById('chatWindow');
+
+      
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.add-to-cart-btn') || e.target.closest('.favorite-btn')) return;
+                
+                const name = card.querySelector('h3').textContent;
+                const price = card.querySelector('.text-orange-500').textContent;
+                const icon = card.querySelector('i').className;
+                
+                document.getElementById('modalProductName').textContent = name;
+                document.getElementById('modalProductPrice').textContent = price;
+                document.getElementById('modalProductIcon').className = icon + ' text-8xl text-stone-400';
+                
+                productModal.classList.remove('hidden');
+            });
         });
 
-        totalEl.textContent = 'R$ ' + total.toFixed(2);
-        let qtySum = cart.reduce((a,b)=>a+b.qty, 0);
-        countEl.textContent = qtySum;
-      }
-    }
+      
+        document.getElementById('closeProductModal').addEventListener('click', () => {
+            productModal.classList.add('hidden');
+        });
 
-    /* -------------------------
-       Wishlist (favorites)
-       ------------------------- */
-    function persistWishlist() {
-      localStorage.setItem('modastyle_wishlist', JSON.stringify(wishlist));
-    }
-    // Toggle wishlist buttons
-    document.querySelectorAll('.add-to-wishlist').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const card = e.currentTarget.closest('.product-card');
-        const id = card.dataset.id;
-        if(wishlist.includes(id)) {
-          wishlist = wishlist.filter(x => x !== id);
-          e.currentTarget.classList.remove('text-red-500');
-          showToast('Removido dos favoritos');
-        } else {
-          wishlist.push(id);
-          e.currentTarget.classList.add('text-red-500');
-          showToast('Adicionado aos favoritos ❤️');
+        document.getElementById('closeAccountModal').addEventListener('click', () => {
+            accountModal.classList.add('hidden');
+        });
+
+        document.getElementById('closeCheckout').addEventListener('click', () => {
+            checkoutModal.classList.add('hidden');
+        });
+
+      
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            accountModal.classList.remove('hidden');
+        });
+
+      
+        document.getElementById('showRegister').addEventListener('click', () => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.querySelector('#accountModal h2').textContent = 'Create Account';
+        });
+
+        document.getElementById('showLogin').addEventListener('click', () => {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.querySelector('#accountModal h2').textContent = 'My Account';
+        });
+
+      
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Login realizado com sucesso!');
+            accountModal.classList.add('hidden');
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Conta criada com sucesso!');
+            accountModal.classList.add('hidden');
+        });
+
+      
+        document.querySelectorAll('.social-login-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const provider = btn.querySelector('span').textContent;
+                showNotification(`Redirecionando para login com ${provider}...`);
+            
+            });
+        });
+
+      
+        document.getElementById('decreaseQty').addEventListener('click', () => {
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                document.getElementById('quantity').textContent = currentQuantity;
+            }
+        });
+
+        document.getElementById('increaseQty').addEventListener('click', () => {
+            currentQuantity++;
+            document.getElementById('quantity').textContent = currentQuantity;
+        });
+
+    
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.size-btn').forEach(b => {
+                    b.className = b.className.replace('border-orange-500 bg-orange-50', 'border-stone-200');
+                });
+                btn.className = btn.className.replace('border-stone-200', 'border-orange-500 bg-orange-50');
+            });
+        });
+
+      
+        document.getElementById('cartBtn').addEventListener('click', () => {
+            cartSidebar.classList.toggle('translate-x-full');
+        });
+
+        document.getElementById('closeCart').addEventListener('click', () => {
+            cartSidebar.classList.add('translate-x-full');
+        });
+
+      
+        function addToCart(name, price, icon, quantity = 1) {
+            const existingItem = cartItems.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cartItems.push({
+                    id: Date.now(),
+                    name,
+                    price: parseFloat(price.replace('$', '')),
+                    icon,
+                    quantity
+                });
+            }
+            
+            updateCartDisplay();
+            showNotification(`${name} added to cart!`);
         }
-        persistWishlist();
-      });
-      // on load mark favorites visually
-      const parentCard = btn.closest('.product-card');
-      if(parentCard && wishlist.includes(parentCard.dataset.id)) btn.classList.add('text-red-500');
-    });
 
-    /* -------------------------
-       Initialize page state
-       ------------------------- */
-    function init() {
-      // restore cart UI
-      updateCartUI();
 
-      // If search input exists, populate suggestions initially hidden
-      if(searchInput) {
-        const products = getAllProducts();
-        // no need to show initially
-      }
-    }
-    init();
+        function updateCartDisplay() {
+            cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            cartBadge.textContent = cartCount;
+            
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
+            
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fas fa-shopping-cart text-4xl text-stone-300 mb-4"></i>
+                        <p class="text-stone-500">Your cart is empty</p>
+                    </div>
+                `;
+            } else {
+                cartItems.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                    
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex items-center gap-4 p-4 border border-stone-200 rounded-xl';
+                    itemElement.innerHTML = `
+                        <div class="w-16 h-16 bg-stone-100 rounded-xl flex items-center justify-center">
+                            <i class="${item.icon} text-stone-400 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-stone-900">${item.name}</h3>
+                            <p class="text-stone-600">$${item.price.toFixed(2)} each</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <button class="decrease-item w-8 h-8 border border-stone-300 rounded-lg flex items-center justify-center hover:bg-stone-50" data-id="${item.id}">
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <span class="w-8 text-center font-semibold">${item.quantity}</span>
+                                <button class="increase-item w-8 h-8 border border-stone-300 rounded-lg flex items-center justify-center hover:bg-stone-50" data-id="${item.id}">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">$${(item.price * item.quantity).toFixed(2)}</p>
+                            <button class="remove-item text-red-500 hover:text-red-700 text-sm" data-id="${item.id}">
+                                Remove
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+            }
+            
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+            
+          
+            document.querySelectorAll('.decrease-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = parseInt(btn.dataset.id);
+                    const item = cartItems.find(i => i.id === itemId);
+                    if (item && item.quantity > 1) {
+                        item.quantity--;
+                        updateCartDisplay();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.increase-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = parseInt(btn.dataset.id);
+                    const item = cartItems.find(i => i.id === itemId);
+                    if (item) {
+                        item.quantity++;
+                        updateCartDisplay();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = parseInt(btn.dataset.id);
+                    cartItems = cartItems.filter(i => i.id !== itemId);
+                    updateCartDisplay();
+                    showNotification('Item removed from cart');
+                });
+            });
+        }
 
-    /* -------------------------
-       Checkout button (demo)
-       ------------------------- */
-    document.getElementById('checkout-btn').addEventListener('click', ()=> {
-      if(cart.length === 0) { showToast('Carrinho vazio'); return; }
-      // Just a demo: clear cart and show toast
-      cart = [];
-      persistCart();
-      updateCartUI();
-      showToast('Compra simulada — carrinho limpo ✅');
-    });
+        
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const name = btn.dataset.name;
+                const price = btn.dataset.price;
+                const icon = btn.dataset.icon;
+                
+                addToCart(name, `$${price}`, icon);
+                
+              
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 150);
+            });
+        });
 
-    /* -------------------------
-       Accessibility: close overlays on ESC
-       ------------------------- */
-    window.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape') {
-        document.getElementById('cart-sidebar').classList.add('translate-x-full');
-        document.getElementById('cart-overlay').classList.add('hidden');
-        document.getElementById('search-bar').classList.add('hidden');
-        document.getElementById('dropdown-user').classList.add('hidden');
-      }
-    });
+      
+        document.getElementById('modalAddToCart').addEventListener('click', () => {
+            const name = document.getElementById('modalProductName').textContent;
+            const price = document.getElementById('modalProductPrice').textContent;
+            const icon = document.getElementById('modalProductIcon').className.split(' ')[1];
+            
+            addToCart(name, price, `fas ${icon}`, currentQuantity);
+            productModal.classList.add('hidden');
+            currentQuantity = 1;
+            document.getElementById('quantity').textContent = '1';
+        });
 
-    // close cart overlay on click
-    document.getElementById('cart-overlay').addEventListener('click', ()=> {
-      document.getElementById('cart-sidebar').classList.add('translate-x-full');
-      document.getElementById('cart-overlay').classList.add('hidden');
-    });
+        
+        document.getElementById('checkoutBtn').addEventListener('click', () => {
+            if (cartItems.length === 0) {
+                showNotification('Your cart is empty!', 'error');
+                return;
+            }
+            
+          
+            const checkoutItemsContainer = document.getElementById('checkoutItems');
+            checkoutItemsContainer.innerHTML = '';
+            
+            cartItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex justify-between items-center';
+                itemElement.innerHTML = `
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                checkoutItemsContainer.appendChild(itemElement);
+            });
+            
+            const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkoutTotal').textContent = `$${total.toFixed(2)}`;
+            
+            cartSidebar.classList.add('translate-x-full');
+            checkoutModal.classList.remove('hidden');
+        });
 
-  </script>
-</body>
-</htm>
-<section id="contato" class="py-12 bg-[color:var(--beige-200)] rounded-2xl px-6 max-w-3xl mx-auto">
-  <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Fale conosco</h2>
-  <p class="text-gray-700 mb-8 text-center">Preencha o formulário abaixo e entraremos em contato o mais rápido possível.</p>
+      
+        document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Order placed successfully! You will receive a confirmation email shortly.');
+            cartItems = [];
+            updateCartDisplay();
+            checkoutModal.classList.add('hidden');
+        });
 
-  <form id="contact-form" class="space-y-4">
-    <div class="flex flex-col sm:flex-row gap-4">
-      <input type="text" name="nome" placeholder="Nome completo" required
-        class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
-      <input type="email" name="email" placeholder="Email" required
-        class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
-    </div>
+        
+        chatBubble.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+        });
 
-    <input type="password" name="senha" placeholder="Senha (opcional)" 
-      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
+        document.getElementById('closeChatWindow').addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+        });
 
-    <textarea name="mensagem" placeholder="Mensagem" rows="5" required
-      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]"></textarea>
+        
+        document.querySelectorAll('.quick-reply').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const topic = btn.textContent.trim();
+                addChatMessage(topic, 'user');
+                
+                
+                setTimeout(() => {
+                    let response = '';
+                    if (topic.includes('Rastrear')) {
+                        response = 'Para rastrear seu pedido, informe o número do pedido ou CPF usado na compra. Você também pode acompanhar pelo seu painel de usuário.';
+                    } else if (topic.includes('tamanhos')) {
+                        response = 'Nossa tabela de medidas está disponível na página de cada produto. Para dúvidas específicas, me informe a peça desejada!';
+                    } else if (topic.includes('Trocas')) {
+                        response = 'Você tem até 30 dias para solicitar troca ou devolução. O produto deve estar em perfeito estado. Quer iniciar uma solicitação?';
+                    } else if (topic.includes('pagamento')) {
+                        response = 'Aceitamos cartão de crédito, débito, PIX, PayPal e Apple Pay. Parcelamos em até 12x sem juros no cartão!';
+                    }
+                    addChatMessage(response, 'bot');
+                }, 1000);
+            });
+        });
 
-    <button type="submit" class="w-full bg-[color:var(--accent)] text-white py-3 rounded-full font-semibold hover:bg-[#ea6a09] transition">
-      Enviar Mensagem
-    </button>
-  </form>
+    
+        const chatInput = document.querySelector('#chatWindow input');
+        const chatSendBtn = document.querySelector('#chatWindow button');
+        
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addChatMessage(message, 'user');
+                chatInput.value = '';
+                
+              
+                setTimeout(() => {
+                    addChatMessage('Obrigada pela sua mensagem! Nossa equipe responderá em breve. Para atendimento mais rápido, use nosso WhatsApp.', 'bot');
+                }, 1500);
+            }
+        }
 
-  <p id="contact-msg" class="mt-4 text-center font-medium"></p>
-</section>
+        chatSendBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+        function addChatMessage(message, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageDiv.className = 'flex justify-end mb-3';
+                messageDiv.innerHTML = `
+                    <div class="bg-blue-500 text-white rounded-lg p-3 max-w-xs">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                `;
+            } else {
+                messageDiv.className = 'flex justify-start mb-3';
+                messageDiv.innerHTML = `
+                    <div class="bg-stone-100 rounded-lg p-3 max-w-xs">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+      
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const heart = btn.querySelector('i');
+                if (heart.classList.contains('far')) {
+                    heart.classList.remove('far');
+                    heart.classList.add('fas');
+                    heart.classList.add('text-red-500');
+                    showNotification('Added to favorites!');
+                } else {
+                    heart.classList.remove('fas', 'text-red-500');
+                    heart.classList.add('far');
+                    showNotification('Removed from favorites!');
+                }
+            });
+        });
+
+      
+        document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Successfully subscribed to newsletter!');
+            e.target.reset();
+        });
+
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.className = b.className.replace('bg-orange-500 text-white', 'bg-stone-100 text-stone-700');
+                });
+                
+                
+                this.className = this.className.replace('bg-stone-100 text-stone-700', 'bg-orange-500 text-white');
+            });
+        });
+
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-emerald-500' : 'bg-red-500';
+            notification.className = `fixed top-24 right-6 ${bgColor} text-white px-6 py-4 rounded-lg shadow-xl z-50 transition-all duration-300 transform translate-x-full`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+          
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+      
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+      
+        const mobileMenuBtn = document.createElement('button');
+        mobileMenuBtn.className = 'md:hidden text-stone-700 p-2';
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-xl"></i>';
+        
+    
+        if (window.innerWidth < 768) {
+            document.querySelector('header .flex').appendChild(mobileMenuBtn);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9877d7a5a3d85686',t:'MTc1OTI3ODUzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
 
